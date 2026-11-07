@@ -8,6 +8,11 @@ Current state: infrastructure and offline rehearsal verified on 2026-10-31.
 This is a recording plan, not a record of successful live execution.
 See DEPLOYMENT.md for startup, credentials, trust boundary and recovery.
 
+## On stage
+
+Do not open the Render root URL: `/` returns 404 by design. Show
+`https://svaar-demo.onrender.com/health`, or the landing page if it is deployed.
+
 ## Preconditions before pressing record
 
 - Approved named HTTPS hostname; remote SSE, 401/403 authentication and operator

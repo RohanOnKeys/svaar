@@ -1,11 +1,18 @@
 
-![Svaar](https://github.com/RohanOnKeys/cerebro/blob/main/assets/Copy%20of%20Svaar.gif?raw=true)
+![Svaar](docs/assets/svaar-banner.gif)
 
 <h1 align="center">Svaar</h1>
 
 <p align="center">
   <strong>An AI incident response agent that verifies updates, coordinates engineers, and picks up the phone.</strong>
 </p>
+
+<p align="center">
+  <a href="https://svaar-demo.onrender.com/health">Live API</a> ·
+  <strong>Status:</strong> core workflows built and tested, API live on Render; calls answered by Svaar and end-to-end chat delivery are next
+</p>
+
+<!-- Demo video: add the link to the line above once it is recorded. -->
 
 <p align="center">
   <a href="#overview">Overview</a> ·
@@ -148,7 +155,7 @@ flowchart TD
 
     Incidents --> Decisions["Decision engine"]
 
-    Sources["GitHub / Jira"] --> Integrations["Integration adapters"]
+    Sources["GitHub"] --> Integrations["Integration adapters"]
     Integrations --> Incidents
 
     classDef external stroke-dasharray: 4 3
@@ -247,8 +254,8 @@ These controls are implemented and covered by automated tests. Live provider acc
 Clone the repository and install dependencies:
 
 ```bash
-git clone https://github.com/RohanOnKeys/cerebro.git
-cd cerebro
+git clone https://github.com/shreya-mishra325/svaar.git
+cd svaar
 
 python -m pip install uv==0.11.29
 uv sync --locked
@@ -381,14 +388,27 @@ The current public demo deployment has passed Render API and database infrastruc
 | Agent runtime and tool execution | Implemented and tested |
 | Authorization and approvals | Implemented and tested |
 | Voice orchestration | Implemented |
-| Bolna provider integration | Implemented; live conversations unverified |
+| Bolna provider integration | Implemented; outbound call completed live, Svaar-answered call next |
 | Caspian Telegram adapter | Read-only provider checks passed |
 | Chat enrollment and delivery | End-to-end acceptance pending |
 | Resolution planning | Implemented |
 | Incident replay | Implemented |
 | Render infrastructure | Public API/database checks passed |
 
-**Demo limitations:** Complete chat enrollment, actual Bolna conversations and end-to-end message delivery have not yet been verified. Implemented functionality and automated test coverage should not be interpreted as successful live provider acceptance.
+### Verified live
+
+- **Render:** the public API is up, and its API and database checks passed.
+- **Bolna:** the account and agent are ready, and a real outbound call placed through Svaar's adapter was answered and completed. The agent on that call ran on Bolna's own model, not Svaar's.
+- **Caspian:** authenticated connection and polling checks passed for Telegram.
+- **Groq:** native tool calling passed on the selected model.
+
+### Next
+
+- A real call answered by Svaar through the voice turn route.
+- Chat enrollment and message delivery, end to end.
+- A real GitHub failure flowing through to an owner alert and timeline.
+
+Automated tests cover the implemented behavior; anything not listed under Verified live has not been accepted against a live provider yet.
 
 ## Documentation
 
