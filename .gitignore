@@ -1,3 +1,5 @@
+# Local planning notes
+plans/
 # Local configuration and credentials
 .env
 .env.*

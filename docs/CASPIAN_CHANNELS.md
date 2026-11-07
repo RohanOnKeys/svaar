@@ -1,7 +1,6 @@
 # Caspian channels
 
-The user's Oct 31 instruction expands the current build beyond PLAN.md's Discord/
-email cuts and optional Slack. PLAN.md itself is unchanged. All channels share
+Since Oct 31 the build also covers Discord, email and Slack. All channels share
 ChatRuntime, the action dispatcher, durable inbound dedupe and outbox. No extra
 SDK, schema, paid service or public route was added.
 

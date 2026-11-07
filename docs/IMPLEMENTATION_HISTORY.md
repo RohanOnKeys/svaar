@@ -27,7 +27,7 @@ The runner is tested with real PostgreSQL and fake providers. Before live use,
 verify Bolna authentication, call-reference mapping and stable turn indices, add
 the phone challenge and wire fallback/confirmation notifications. The inherited
 fallback mentions messaging, but notification delivery is not implemented here.
-See plans/anomaly.md A-013. Run alembic upgrade head before using the new schema.
+Run alembic upgrade head before using the new schema.
 
 ### Bolna outbound adapter and internal call lifecycle
 
@@ -92,7 +92,7 @@ The live flow is still incomplete: no chat issuance command/private code deliver
 provider turn/status endpoint or real verification call is enabled. Bolna reference
 and retry-index delivery must be verified before exposing a route. No code is sent
 or call placed automatically. Without a configured classifier, voice gates continue to request clarification.
-See plans/anomaly.md A-015; development migrations still need applying.
+Development migrations still need applying.
 
 ### Request phone verification in private chat
 
@@ -513,7 +513,7 @@ Apply migrations through 0021 before using these features. Configuration alone
 does not establish live access. See [the non-voice rehearsal guide](NONVOICE_REHEARSAL.md)
 for the offline test command, operator routes, opt-in setup and remaining work.
 This update supersedes earlier standalone-only log/policy notes; their dated test
-counts remain historical. PLAN.md/CEREBRO_CONTEXT.md and the private .env are unchanged.
+counts remain historical. The private .env is unchanged.
 
 
 ### Claim verification calls
@@ -597,7 +597,7 @@ uv run --locked python -m svaar.dispatch --place CALL_ID --org ORG_ID
 --place dials a real phone after checking Bolna readiness, the incident or claim, and
 SVAAR_VOICE_DAILY_CALL_LIMIT. Use it only with explicit authorization for that call.
 Whether Bolna delivers the prompt reference and stable history is unverified until the
-first real call (plans/anomaly.md A-028).
+first real call.
 
 
 Additional Caspian channels: see [channel setup and acceptance status](CASPIAN_CHANNELS.md).
