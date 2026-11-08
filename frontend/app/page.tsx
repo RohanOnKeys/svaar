@@ -3,6 +3,7 @@ import type { IconType } from "react-icons";
 import { FaDiscord, FaEnvelope, FaPhoneAlt, FaSlack, FaTelegramPlane } from "react-icons/fa";
 import styles from "./page.module.css";
 import BackgroundVideo from "./background-video";
+import MatchGap from "./match-gap";
 
 // Channels Svaar supports; shown as information, not links.
 const channels: { label: string; icon: IconType }[] = [
@@ -97,7 +98,7 @@ export default function Home() {
 
       <section className={styles.hero}>
         <div className={styles.intro}>
-          <p>
+          <p id="intro-text">
             Svaar is a voice-enabled agent for engineering incidents. It lives in team chat,
             watches CI, rebuilds what happened from recorded events, checks status claims against
             evidence, calls engineers by phone to verify them, and negotiates conflicting
@@ -115,25 +116,29 @@ export default function Home() {
         ))}
       </section>
 
-      <section id="safety" className={styles.cards} aria-label="How Svaar keeps you safe">
-        {cards.map((card) => (
-          <article key={card.title} className={styles.card}>
-            <h4>{card.title}</h4>
-            <p>{card.body}</p>
-          </article>
-        ))}
-      </section>
+      {/* In the ending, only the channel icons are white. */}
+      <div className={styles.finale}>
+        <section id="safety" className={styles.cards} aria-label="How Svaar keeps you safe">
+          {cards.map((card) => (
+            <article key={card.title} className={styles.card}>
+              <h4>{card.title}</h4>
+              <p>{card.body}</p>
+            </article>
+          ))}
+        </section>
 
-      <section id="channels" className={styles.closing}>
-        <Channels />
-      </section>
+        <section id="channels" className={styles.closing}>
+          <Channels />
+        </section>
 
-      <footer className={styles.footer}>
-        <p>Models propose, deterministic code enforces, Bolna speaks.</p>
-        <a href={PREVIEW_MAILTO} className={styles.bookPreview}>
-          Book a preview
-        </a>
-      </footer>
+        <footer className={styles.footer}>
+          <a href={PREVIEW_MAILTO} className={styles.bookPreview}>
+            Book a preview
+          </a>
+        </footer>
+      </div>
+
+      <MatchGap />
     </main>
   );
 }

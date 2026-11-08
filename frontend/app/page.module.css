@@ -5,11 +5,13 @@
   overflow-x: clip;
 }
 
-/* Fixed so the background video sits behind every section. */
+/* Fixed so the background video sits behind every section. It bleeds past the
+   viewport so the scroll blur never shows soft edges. */
 .background {
   position: fixed;
-  inset: 0;
+  inset: -32px;
   z-index: -1;
+  will-change: filter;
 }
 
 .background video {
@@ -157,7 +159,6 @@
 
 .bookPreview {
   display: inline-block;
-  margin-top: 16px;
   padding: 10px 22px;
   border: 1.5px solid var(--ink);
   border-radius: 999px;
@@ -220,8 +221,9 @@
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: clamp(16px, 2vw, 24px);
   max-width: 1120px;
-  margin: 0 auto;
-  padding: clamp(40px, 6vw, 80px) var(--gutter) 0;
+  /* Top margin is set by match-gap.tsx so the grid sits centred between sections. */
+  margin: clamp(40px, 6vw, 80px) auto 0;
+  padding: 0 var(--gutter);
 }
 
 .card {
@@ -240,6 +242,7 @@
   font-size: 16px;
 }
 
+/* No top padding: match-gap.tsx sets the top margin to the intro-to-feature gap. */
 .closing {
   display: grid;
   justify-items: center;
@@ -247,19 +250,24 @@
   max-width: 760px;
   margin: clamp(40px, 6vw, 80px) auto 0;
   width: calc(100% - 2 * var(--gutter));
-  padding: clamp(16px, 4vw, 40px) 0;
+  padding: 0;
   text-align: center;
 }
 
+/* In the ending, only the channel icons are white. */
+.finale {
+  --icon: #fff;
+}
+
+.finale .contact {
+  filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.35));
+}
+
+
+/* Sits right under the channels: together they are the page's closing block. */
 .footer {
-  padding: clamp(32px, 5vw, 56px) var(--gutter);
+  padding: 24px var(--gutter) clamp(32px, 5vw, 56px);
   text-align: center;
-}
-
-.footer p {
-  margin: 0;
-  font-size: 15px;
-  color: var(--ink-soft);
 }
 
 .visuallyHidden {

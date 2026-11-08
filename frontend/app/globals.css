@@ -19,6 +19,8 @@ body {
   color: var(--ink);
   background: #e9d6cc;
   -webkit-font-smoothing: antialiased;
+  /* Gotu ships in one weight; a hairline stroke reads slightly bolder without faux bold. */
+  -webkit-text-stroke: 0.35px currentColor;
 }
 
 a {
