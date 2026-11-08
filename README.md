@@ -8,6 +8,7 @@
 </p>
 
 <p align="center">
+  <a href="https://svaar.vercel.app/">Website</a> ·
   <a href="https://svaar-demo.onrender.com/health">Live API</a> ·
   <strong>Status:</strong> core workflows built and tested, API live on Render; calls answered by Svaar and end-to-end chat delivery are next
 </p>
