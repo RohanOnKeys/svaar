@@ -1,34 +1,28 @@
 import Image from "next/image";
 import type { IconType } from "react-icons";
-import { BsGridFill } from "react-icons/bs";
-import {
-  FaDiscord,
-  FaEnvelope,
-  FaPhoneAlt,
-  FaRegUserCircle,
-  FaSlack,
-  FaTelegramPlane,
-} from "react-icons/fa";
+import { FaDiscord, FaEnvelope, FaPhoneAlt, FaSlack, FaTelegramPlane } from "react-icons/fa";
 import styles from "./page.module.css";
 import Intro from "./intro";
 
-// Placeholder destinations until the team supplies real contact links.
-const contacts: { label: string; href: string; icon: IconType }[] = [
-  { label: "Email", href: "#", icon: FaEnvelope },
-  { label: "Phone", href: "#", icon: FaPhoneAlt },
-  { label: "Discord", href: "#", icon: FaDiscord },
-  { label: "Slack", href: "#", icon: FaSlack },
-  { label: "Telegram", href: "#", icon: FaTelegramPlane },
+// Channels Svaar supports; shown as information, not links.
+const channels: { label: string; icon: IconType }[] = [
+  { label: "Email", icon: FaEnvelope },
+  { label: "Phone", icon: FaPhoneAlt },
+  { label: "Discord", icon: FaDiscord },
+  { label: "Slack", icon: FaSlack },
+  { label: "Telegram", icon: FaTelegramPlane },
 ];
+
+const PREVIEW_MAILTO = "mailto:rohanpxquantum@gmail.com?subject=Svaar%20preview";
 
 const features = [
   {
-    title: "Ask What Happened. Hear the Timeline.",
-    body: "When a pipeline breaks, ask Svaar in chat or on a call. It rebuilds the incident from recorded events, in order, with the source of every step, and names the step that failed. No digging through logs.",
+    title: "Ask What Happened. Every Claim, Checked.",
+    body: "When a pipeline breaks, ask Svaar in chat or on a call and hear the incident rebuilt from recorded events, in order, with the step that failed. When someone says the fix is merged, Svaar looks for the merge, and if the evidence is missing it calls that person and asks. A missed call never counts against anyone.",
   },
   {
-    title: "Claims, Checked Against Evidence.",
-    body: "Someone says the fix is merged. Svaar looks for the merge. If the evidence is there, the claim is confirmed. If it is not, Svaar calls that person and asks. A missed call or a busy line never counts against anyone.",
+    title: "Understands What You Actually Mean.",
+    body: "Svaar interprets ambiguous, informal client requests and infers the intent behind them. It traces requirements across previous conversations to pin down the exact task, pulls in the relevant context, and routes it to the right person to get it done.",
   },
   {
     title: "It Calls When Nobody Answers.",
@@ -37,6 +31,10 @@ const features = [
 ];
 
 const cards = [
+  {
+    title: "Vague Requests, Clear Tasks.",
+    body: "Informal asks become a defined task, with context from past conversations and the right owner attached.",
+  },
   {
     title: "One Agent, Chat and Voice.",
     body: "Team chat and phone calls reach the same agent, the same tools and the same rules. Pick up wherever you are.",
@@ -63,15 +61,19 @@ const cards = [
   },
 ];
 
-function ContactLinks() {
+function Channels() {
   return (
-    <nav className={styles.contacts} aria-label="Contact">
-      {contacts.map(({ label, href, icon: Icon }) => (
-        <a key={label} href={href} aria-label={label} className={styles.contact}>
-          <Icon />
-        </a>
-      ))}
-    </nav>
+    <div className={styles.channels}>
+      <p className={styles.channelsLabel}>Available on</p>
+      <ul className={styles.contacts} aria-label="Supported channels">
+        {channels.map(({ label, icon: Icon }) => (
+          <li key={label} className={styles.contact} title={label}>
+            <Icon aria-hidden="true" />
+            <span className={styles.visuallyHidden}>{label}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
@@ -81,29 +83,11 @@ function Hero({ decorative = false }: { decorative?: boolean }) {
   return (
     <section className={styles.hero} aria-hidden={decorative || undefined}>
       <header className={styles.header}>
-        <button
-          type="button"
-          className={styles.iconButton}
-          aria-label="Open menu"
-          tabIndex={decorative ? -1 : undefined}
-        >
-          <BsGridFill />
-        </button>
-
         <Brand className={styles.brand}>
           <Image src="/swan.png" alt="" width={894} height={868} className={styles.swan} />
           <span className={styles.wordmark}>vaar</span>
           <span className={styles.visuallyHidden}>Svaar</span>
         </Brand>
-
-        <button
-          type="button"
-          className={styles.iconButton}
-          aria-label="Account"
-          tabIndex={decorative ? -1 : undefined}
-        >
-          <FaRegUserCircle />
-        </button>
       </header>
 
       <div className={styles.intro}>
@@ -164,12 +148,15 @@ export default function Home() {
         ))}
       </section>
 
-      <section id="contact" className={styles.closing}>
-        <ContactLinks />
+      <section id="channels" className={styles.closing}>
+        <Channels />
       </section>
 
       <footer className={styles.footer}>
         <p>Models propose, deterministic code enforces, Bolna speaks.</p>
+        <a href={PREVIEW_MAILTO} className={styles.bookPreview}>
+          Book a preview
+        </a>
       </footer>
     </main>
   );
