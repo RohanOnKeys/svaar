@@ -11,7 +11,8 @@ npm run typecheck
 ```
 
 - Font: Gotu, loaded with `next/font/google`.
-- Assets in `public/`: `background.gif` (animated background), `background-still.jpg`
-  (first frame, shown when the visitor prefers reduced motion) and `swan.png`
-  (logo with a transparent background).
-- Contact links in `app/page.tsx` are placeholders (`#`) until real destinations are set.
+- Assets in `public/`: `background.mp4` (background video) and `swan.png` (logo with a
+  transparent background).
+- The video plays while the large header is on screen and pauses the moment it scrolls
+  away (`app/background-video.tsx`); reduced-motion visitors see its first frame.
+- The channel icons are informational, not links.

@@ -25,12 +25,6 @@ a {
   color: inherit;
 }
 
-/* The wave carries in a copy of the hero; the real one appears when it lands. */
-html[data-intro="intro"] main > section:first-of-type,
-html[data-intro="reveal"] main > section:first-of-type {
-  visibility: hidden;
-}
-
 h1,
 h3,
 h4 {

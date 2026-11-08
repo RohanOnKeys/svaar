@@ -2,7 +2,7 @@ import Image from "next/image";
 import type { IconType } from "react-icons";
 import { FaDiscord, FaEnvelope, FaPhoneAlt, FaSlack, FaTelegramPlane } from "react-icons/fa";
 import styles from "./page.module.css";
-import Intro from "./intro";
+import BackgroundVideo from "./background-video";
 
 // Channels Svaar supports; shown as information, not links.
 const channels: { label: string; icon: IconType }[] = [
@@ -48,12 +48,8 @@ const cards = [
     body: "Reruns and other risky actions need a one-time code from the owner on a second channel. They run once, and only once.",
   },
   {
-    title: "Plans That Pass the Validator.",
-    body: "Release freezes, on-call coverage and deploy slots are negotiated into a plan, and only a plan that passes every hard rule is accepted.",
-  },
-  {
-    title: "Replay Without Risk.",
-    body: "Try the corrected pipeline in a sandbox first. Results are clearly marked as simulated and never touch production.",
+    title: "Validated Plans, Simulated First.",
+    body: "Freezes, on-call coverage and deploy slots become a plan that passes every hard rule, then a clearly labelled sandbox run before anything touches production.",
   },
   {
     title: "Every Decision on Record.",
@@ -77,58 +73,38 @@ function Channels() {
   );
 }
 
-/** Landing hero. The decorative copy is the one the intro wave carries in. */
-function Hero({ decorative = false }: { decorative?: boolean }) {
-  const Brand = decorative ? "div" : "h1";
-  return (
-    <section className={styles.hero} aria-hidden={decorative || undefined}>
-      <header className={styles.header}>
-        <Brand className={styles.brand}>
-          <Image src="/swan.png" alt="" width={894} height={868} className={styles.swan} />
-          <span className={styles.wordmark}>vaar</span>
-          <span className={styles.visuallyHidden}>Svaar</span>
-        </Brand>
-      </header>
-
-      <div className={styles.intro}>
-        <p>
-          Svaar is a voice-enabled agent for engineering incidents. It lives in team chat,
-          watches CI, rebuilds what happened from recorded events, checks status claims against
-          evidence, calls engineers by phone to verify them, and negotiates conflicting
-          constraints into a plan that deterministic code has validated.
-        </p>
-      </div>
-    </section>
-  );
-}
-
 export default function Home() {
   return (
     <main className={styles.page}>
-      <picture className={styles.background} aria-hidden="true">
-        <source srcSet="/background-still.jpg" media="(prefers-reduced-motion: reduce)" />
-        <img src="/background.gif" alt="" />
-      </picture>
+      {/* The video plays while the large header is on screen and pauses as it leaves. */}
+      <BackgroundVideo watch="splash" />
 
-      <Intro carried={<Hero decorative />}>
-        <div className={styles.splash}>
-          <div className={styles.splashBrand}>
-            <Image
-              src="/swan.png"
-              alt=""
-              width={894}
-              height={868}
-              priority
-              className={styles.splashSwan}
-            />
-            <span className={styles.splashWordmark}>vaar</span>
-            <span className={styles.visuallyHidden}>Svaar</span>
-          </div>
-          <span className={styles.scrollHint} aria-hidden="true" />
+      <section id="splash" className={styles.splash}>
+        <h1 className={styles.splashBrand}>
+          <Image
+            src="/swan.png"
+            alt=""
+            width={894}
+            height={868}
+            priority
+            className={styles.splashSwan}
+          />
+          <span className={styles.splashWordmark}>vaar</span>
+          <span className={styles.visuallyHidden}>Svaar</span>
+        </h1>
+        <span className={styles.scrollHint} aria-hidden="true" />
+      </section>
+
+      <section className={styles.hero}>
+        <div className={styles.intro}>
+          <p>
+            Svaar is a voice-enabled agent for engineering incidents. It lives in team chat,
+            watches CI, rebuilds what happened from recorded events, checks status claims against
+            evidence, calls engineers by phone to verify them, and negotiates conflicting
+            constraints into a plan that deterministic code has validated.
+          </p>
         </div>
-      </Intro>
-
-      <Hero />
+      </section>
 
       <section id="features" className={styles.features} aria-label="What Svaar does">
         {features.map((feature) => (
