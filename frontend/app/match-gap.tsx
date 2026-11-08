@@ -26,7 +26,10 @@ export default function MatchGap() {
       const intro = document.getElementById("intro-text");
       const features = Array.from(document.querySelectorAll<HTMLElement>("#features article"));
       const cards = document.getElementById("safety");
-      const firstCard = cards?.querySelector("article");
+      // Only one card grid is visible per screen size; measure that one.
+      const firstCard = Array.from(cards?.querySelectorAll<HTMLElement>("article") ?? []).find(
+        (card) => card.offsetParent !== null,
+      );
       const closing = document.getElementById("channels");
       const firstHeading = features[0]?.querySelector("h3");
       if (!intro || !firstHeading || !cards || !firstCard || !closing) return;

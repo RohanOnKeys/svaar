@@ -216,14 +216,22 @@
   margin: 0 auto;
 }
 
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
-  gap: clamp(16px, 2vw, 24px);
+.cardsSection {
   max-width: 1120px;
   /* Top margin is set by match-gap.tsx so the grid sits centred between sections. */
   margin: clamp(40px, 6vw, 80px) auto 0;
   padding: 0 var(--gutter);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: clamp(16px, 2vw, 24px);
+}
+
+/* The merged three-card version is for phones only. */
+.cardsCompact {
+  display: none;
 }
 
 .card {
@@ -279,15 +287,20 @@
   white-space: nowrap;
 }
 
-/* Phones only: a compact two-column card grid with smaller, tighter type. */
+/* Phones only: three merged cards, one short line each, smaller and tighter. */
 @media (max-width: 640px) {
-  .cards {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px 14px;
+  .cardsFull {
+    display: none;
+  }
+
+  .cardsCompact {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
   }
 
   .card {
-    padding-top: 10px;
+    padding-top: 12px;
     border-top-color: rgba(18, 18, 18, 0.2);
   }
 

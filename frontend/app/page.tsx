@@ -58,6 +58,22 @@ const cards = [
   },
 ];
 
+// Phone version: the six cards above merged into three, one short line each.
+const compactCards = [
+  {
+    title: "One Agent, Any Channel.",
+    body: "Vague asks become clear tasks, in chat or on a call.",
+  },
+  {
+    title: "Verified Before It Runs.",
+    body: "Verified people. Risky actions need the owner's code.",
+  },
+  {
+    title: "Tested, Then Recorded.",
+    body: "Plans pass every rule and a sandbox. Every decision is logged.",
+  },
+];
+
 function Channels() {
   return (
     <div className={styles.channels}>
@@ -118,13 +134,24 @@ export default function Home() {
 
       {/* In the ending, only the channel icons are white. */}
       <div className={styles.finale}>
-        <section id="safety" className={styles.cards} aria-label="How Svaar keeps you safe">
-          {cards.map((card) => (
-            <article key={card.title} className={styles.card}>
-              <h4>{card.title}</h4>
-              <p>{card.body}</p>
-            </article>
-          ))}
+        <section id="safety" className={styles.cardsSection} aria-label="How Svaar keeps you safe">
+          {/* Six cards on larger screens; three short merged ones on phones. */}
+          <div className={`${styles.cards} ${styles.cardsFull}`}>
+            {cards.map((card) => (
+              <article key={card.title} className={styles.card}>
+                <h4>{card.title}</h4>
+                <p>{card.body}</p>
+              </article>
+            ))}
+          </div>
+          <div className={`${styles.cards} ${styles.cardsCompact}`}>
+            {compactCards.map((card) => (
+              <article key={card.title} className={styles.card}>
+                <h4>{card.title}</h4>
+                <p>{card.body}</p>
+              </article>
+            ))}
+          </div>
         </section>
 
         <section id="channels" className={styles.closing}>
