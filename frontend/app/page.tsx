@@ -16,7 +16,7 @@ const channels: { label: string; icon: IconType }[] = [
   { label: "Telegram", icon: FaTelegramPlane },
 ];
 
-const PREVIEW_MAILTO = "mailto:robinnxander@zohomail.com?subject=Svaar%20preview";
+const PREVIEW_MAILTO = "mailto:robinxander23@gmail.com?subject=Svaar%20preview";
 
 type Feature = {
   title: string;
@@ -45,7 +45,7 @@ const features: Feature[] = [
     },
   },
   {
-    title: "It Calls When Nobody Answers.",
+    title: "Dials, Then Fixes.",
     diagram: {
       src: "/features/fallback.png",
       width: 1760,
@@ -109,12 +109,7 @@ export default function Home() {
 
       <section className={styles.hero}>
         <div className={styles.intro}>
-          <p id="intro-text">
-            Svaar is a voice-enabled agent for engineering incidents. It lives in team chat,
-            watches CI, rebuilds what happened from recorded events, checks status claims against
-            evidence, calls engineers by phone to verify them, and negotiates conflicting
-            constraints into a plan that deterministic code has validated.
-          </p>
+          <p id="intro-text" className={styles.tagline}>More than a Pager</p>
         </div>
       </section>
 

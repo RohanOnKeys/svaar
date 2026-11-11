@@ -7,28 +7,48 @@ import styles from "../_site/site.module.css";
 
 export const metadata: Metadata = { title: "Team · Svaar" };
 
-const team: { name: string; photo: string; email: string; linkedin: string; mirrored?: boolean }[] = [
+// `color` matches each sticker's outline; `edge` is the thin outline around the icons
+// (black, except white around the black icons so they still stand out).
+const team: {
+  name: string;
+  photo: string;
+  email: string;
+  linkedin: string;
+  color: string;
+  edge: string;
+  edgeWidth?: string;
+  mirrored?: boolean;
+}[] = [
   {
     name: "Rohan Pattanayak",
-    photo: "/team/rohan.jpg",
+    photo: "/team/rohan.png",
+    color: "#f5f4f2",
+    edge: "#000",
     email: "rohanpxquantum@gmail.com",
     linkedin: "https://www.linkedin.com/in/rohan-a142a1284/",
   },
   {
     name: "Soumya Ranjan Panda",
-    photo: "/team/soumya.jpg",
+    photo: "/team/soumya.png",
+    color: "#111",
+    edge: "#fff",
+    edgeWidth: "0.9px",
     email: "pandaranjan314@gmail.com",
     linkedin: "https://www.linkedin.com/in/soumya-ranjan-panda-802b1a331/",
   },
   {
     name: "Suneeti Aryaa",
-    photo: "/team/suneeti.jpg",
+    photo: "/team/suneeti.png",
+    color: "#440a13",
+    edge: "#000",
     email: "suneetiaryaa@gmail.com",
     linkedin: "https://www.linkedin.com/in/suneeti-aryaa-02a3351ba/",
   },
   {
     name: "Shreya Mishra",
-    photo: "/team/shreya.jpg",
+    photo: "/team/shreya.png",
+    color: "#0c3e43",
+    edge: "#000",
     email: "shreyamishra2k05@gmail.com",
     linkedin: "https://www.linkedin.com/in/shreya-mishra-developer/",
     mirrored: true,
@@ -59,8 +79,17 @@ export default function TeamPage() {
                     : styles.memberPhoto
                 }
               />
-              {/* Mail on the left, LinkedIn on the right, right under the photo. */}
-              <div className={styles.memberLinks}>
+              {/* Mail and LinkedIn, side by side and centred under the sticker. */}
+              <div
+                className={styles.memberLinks}
+                style={
+                  {
+                    "--icon-fill": member.color,
+                    "--icon-edge": member.edge,
+                    "--icon-edge-width": member.edgeWidth,
+                  } as React.CSSProperties
+                }
+              >
                   <a
                     href={`mailto:${member.email}`}
                     className={styles.memberIcon}

@@ -154,6 +154,12 @@
   line-height: 1.38;
 }
 
+/* The short line under the large logo reads as a tagline, so it is set larger. */
+.intro .tagline {
+  font-size: clamp(30px, 4.4vw, 64px);
+  line-height: 1.1;
+}
+
 .channels {
   display: grid;
   justify-items: center;
@@ -328,7 +334,7 @@
     position: relative;
     grid-template-columns: repeat(12, minmax(0, 1fr));
     column-gap: clamp(24px, 2.4vw, 40px);
-    row-gap: clamp(130px, 13vw, 220px);
+    row-gap: clamp(170px, 16vw, 280px);
   }
 
   .trail .card {
@@ -345,12 +351,13 @@
     pointer-events: none;
   }
 
+  /* One card per row, swinging edge to edge: left, right, centre, twice over. */
   .step1 { grid-column: 1 / span 3; grid-row: 1; }
-  .step2 { grid-column: 10 / span 3; grid-row: 1; margin-top: clamp(110px, 10vw, 170px); }
-  .step3 { grid-column: 4 / span 3; grid-row: 2; }
-  .step4 { grid-column: 8 / span 3; grid-row: 3; }
-  .step5 { grid-column: 2 / span 3; grid-row: 3; }
-  .step6 { grid-column: 5 / span 3; grid-row: 4; }
+  .step2 { grid-column: 10 / span 3; grid-row: 2; }
+  .step3 { grid-column: 5 / span 3; grid-row: 3; text-align: center; }
+  .step4 { grid-column: 1 / span 3; grid-row: 4; }
+  .step5 { grid-column: 10 / span 3; grid-row: 5; }
+  .step6 { grid-column: 5 / span 3; grid-row: 6; text-align: center; }
 }
 
 /* Phones skip the cards: the diagrams above already tell the story. */

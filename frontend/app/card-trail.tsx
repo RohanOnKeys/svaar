@@ -5,24 +5,21 @@ import styles from "./page.module.css";
 
 type Point = [number, number];
 
-// How each card connects to the next, following the hand-drawn layout:
-// "hv" leaves from the side and drops into the next card's top,
-// "h" runs side to side, "vh" drops from the bottom and turns into the side.
-const ROUTES = ["hv", "hv", "hv", "h", "vh"] as const;
-
+const GAP = 14; // Space left between the line and a card.
+const TITLE = 13; // Height of a card's title line, where the line leaves a card.
 const RADIUS = 14; // Corner rounding, in pixels.
-const GAP = 12; // Space left between the line and a card.
-const TITLE = 13; // Height of a card's title line, where side connections attach.
+const STEP_OUT = 44; // How far the line steps away from a card before turning.
+const OVERSHOOT = 72; // How far it runs past the next card before doubling back.
 
-/** Path through the points with softly rounded corners. */
+/** Straight runs joined by softly rounded corners. */
 function rounded(points: Point[]) {
   let d = `M${points[0][0]},${points[0][1]}`;
   for (let i = 1; i < points.length - 1; i += 1) {
     const [px, py] = points[i - 1];
     const [cx, cy] = points[i];
     const [nx, ny] = points[i + 1];
-    const inLength = Math.hypot(cx - px, cy - py);
-    const outLength = Math.hypot(nx - cx, ny - cy);
+    const inLength = Math.hypot(cx - px, cy - py) || 1;
+    const outLength = Math.hypot(nx - cx, ny - cy) || 1;
     const r = Math.min(RADIUS, inLength / 2, outLength / 2);
     const ax = cx - ((cx - px) / inLength) * r;
     const ay = cy - ((cy - py) / inLength) * r;
@@ -35,8 +32,11 @@ function rounded(points: Point[]) {
 }
 
 /**
- * Dashed line that winds through the card trail on wide screens. It is measured
- * from the cards' real positions, so it stays attached at every width.
+ * Dashed line that winds through the card trail on wide screens like a path through
+ * a maze: only straight runs and right-angle turns with rounded corners. Each stretch
+ * steps out of a card, drops, runs past the next card, drops again, doubles back and
+ * enters it from above. Measured from the cards' real positions, so it stays
+ * attached at every width.
  */
 export default function CardTrail() {
   const svg = useRef<SVGSVGElement>(null);
@@ -65,29 +65,29 @@ export default function CardTrail() {
 
       const paths: string[] = [];
       const dots: Point[] = [];
-      ROUTES.forEach((route, index) => {
+      for (let index = 0; index < boxes.length - 1; index += 1) {
         const a = boxes[index];
         const b = boxes[index + 1];
-        if (!a || !b) return;
-        const toRight = b.cx > a.cx;
-        let points: Point[];
-        if (route === "hv") {
-          const start: Point = [toRight ? a.right + GAP : a.left - GAP, a.top + TITLE];
-          points = [start, [b.cx, start[1]], [b.cx, b.top - GAP]];
-        } else if (route === "h") {
-          const startY = a.top + TITLE;
-          const endY = b.top + TITLE;
-          const start: Point = [toRight ? a.right + GAP : a.left - GAP, startY];
-          const end: Point = [toRight ? b.left - GAP : b.right + GAP, endY];
-          const mid = (start[0] + end[0]) / 2;
-          points = startY === endY ? [start, end] : [start, [mid, startY], [mid, endY], end];
-        } else {
-          const end: Point = [toRight ? b.left - GAP : b.right + GAP, b.top + TITLE];
-          points = [[a.cx, a.bottom + GAP], [a.cx, end[1]], end];
-        }
+        const way = b.cx > a.cx ? 1 : -1;
+        const start: Point = [way > 0 ? a.right + GAP : a.left - GAP, a.top + TITLE];
+        const end: Point = [b.cx, b.top - GAP];
+        const room = Math.max(end[1] - a.bottom, 40);
+        const firstDrop = a.bottom + room * 0.35;
+        const secondDrop = a.bottom + room * 0.7;
+        const out = start[0] + way * STEP_OUT;
+        const past = b.cx + way * OVERSHOOT;
+        const points: Point[] = [
+          start,
+          [out, start[1]],
+          [out, firstDrop],
+          [past, firstDrop],
+          [past, secondDrop],
+          [b.cx, secondDrop],
+          end,
+        ];
         paths.push(rounded(points));
-        dots.push(points[0], points[points.length - 1]);
-      });
+        dots.push(start, end);
+      }
 
       setShape({ w: origin.width, h: origin.height, d: paths.join(" "), dots });
     };
@@ -115,21 +115,38 @@ export default function CardTrail() {
           <stop offset="0.72" stopColor="#722F40" />
           <stop offset="1" stopColor="#2A9D8F" />
         </linearGradient>
+        {/* Neon glow to match the diagrams: a tight and a wide blur under the line. */}
+        <filter
+          id="card-trail-glow"
+          filterUnits="userSpaceOnUse"
+          x="-40"
+          y="-40"
+          width={(shape?.w ?? 0) + 80}
+          height={(shape?.h ?? 0) + 80}
+        >
+          <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="tight" />
+          <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="wide" />
+          <feMerge>
+            <feMergeNode in="wide" />
+            <feMergeNode in="tight" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
       </defs>
       {shape ? (
-        <>
+        <g filter="url(#card-trail-glow)">
           <path
             d={shape.d}
             fill="none"
             stroke="url(#card-trail)"
-            strokeWidth="1.6"
-            strokeDasharray="7 7"
+            strokeWidth="3"
+            strokeDasharray="10 9"
             strokeLinecap="round"
           />
           {shape.dots.map(([x, y], index) => (
-            <circle key={index} cx={x} cy={y} r="3.5" fill="url(#card-trail)" />
+            <circle key={index} cx={x} cy={y} r="5" fill="url(#card-trail)" />
           ))}
-        </>
+        </g>
       ) : null}
     </svg>
   );
