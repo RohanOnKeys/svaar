@@ -32,22 +32,28 @@ export default function MatchGap() {
       );
       const closing = document.getElementById("channels");
       const firstHeading = features[0]?.querySelector("h3");
-      if (!intro || !firstHeading || !cards || !firstCard || !closing) return;
+      if (!intro || !firstHeading || !closing) return;
 
       const gap = top(firstHeading) - bottom(intro);
 
       for (let index = 1; index < features.length; index += 1) {
-        const previous = features[index - 1].querySelector("p");
+        // A feature ends with its paragraph or its diagram.
+        const previous = features[index - 1].lastElementChild;
         const heading = features[index].querySelector("h3");
         if (previous && heading) space(features[index], previous, heading, gap);
       }
 
-      const lastText = features[features.length - 1].querySelector("p");
-      if (lastText) space(cards, lastText, firstCard, gap);
-      // The channels and the footer form one block at the bottom, so only the
-      // space above the block follows the rhythm.
+      const lastText = features[features.length - 1].lastElementChild;
       const label = closing.firstElementChild ?? closing;
-      space(closing, cards, label, gap);
+      // The channels and the footer form one block at the bottom, so only the
+      // space above the block follows the rhythm. Phones hide the cards, so the
+      // block then follows the last feature directly.
+      if (cards && firstCard) {
+        if (lastText) space(cards, lastText, firstCard, gap);
+        space(closing, cards, label, gap);
+      } else if (lastText) {
+        space(closing, lastText, label, gap);
+      }
     };
 
     sync();

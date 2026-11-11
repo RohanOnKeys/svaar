@@ -511,8 +511,8 @@
 .team {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(14px, 2vw, 24px);
-  margin: clamp(32px, 5vw, 56px) 0 0;
+  gap: clamp(40px, 6.5vw, 104px);
+  margin: clamp(64px, 10vw, 140px) 0 0;
   padding: 0;
   list-style: none;
 }
@@ -528,6 +528,11 @@
   height: auto;
   aspect-ratio: 1 / 1;
   object-fit: cover;
+}
+
+/* Flips a photo left to right. */
+.memberPhotoMirrored {
+  transform: scaleX(-1);
 }
 
 .memberLinks {
@@ -588,9 +593,12 @@
     display: none;
   }
 
-  /* Four across is too small on a phone: two rows of two. */
+  /* Phones: one photo after another, centred, with room between them. */
   .team {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, min(180px, 52vw));
+    justify-content: center;
+    gap: 44px;
+    margin-top: 40px;
   }
 
   .consoleMain {

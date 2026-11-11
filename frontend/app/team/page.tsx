@@ -7,7 +7,7 @@ import styles from "../_site/site.module.css";
 
 export const metadata: Metadata = { title: "Team · Svaar" };
 
-const team = [
+const team: { name: string; photo: string; email: string; linkedin: string; mirrored?: boolean }[] = [
   {
     name: "Rohan Pattanayak",
     photo: "/team/rohan.jpg",
@@ -31,6 +31,7 @@ const team = [
     photo: "/team/shreya.jpg",
     email: "shreyamishra2k05@gmail.com",
     linkedin: "https://www.linkedin.com/in/shreya-mishra-developer/",
+    mirrored: true,
   },
 ];
 
@@ -52,7 +53,11 @@ export default function TeamPage() {
                 width={600}
                 height={600}
                 sizes="(max-width: 760px) 50vw, 260px"
-                className={styles.memberPhoto}
+                className={
+                  member.mirrored
+                    ? `${styles.memberPhoto} ${styles.memberPhotoMirrored}`
+                    : styles.memberPhoto
+                }
               />
               {/* Mail on the left, LinkedIn on the right, right under the photo. */}
               <div className={styles.memberLinks}>

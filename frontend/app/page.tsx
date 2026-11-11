@@ -4,6 +4,7 @@ import type { IconType } from "react-icons";
 import { FaDiscord, FaEnvelope, FaPhoneAlt, FaSlack, FaTelegramPlane } from "react-icons/fa";
 import styles from "./page.module.css";
 import BackgroundVideo from "./background-video";
+import CardTrail from "./card-trail";
 import MatchGap from "./match-gap";
 
 // Channels Svaar supports; shown as information, not links.
@@ -17,62 +18,52 @@ const channels: { label: string; icon: IconType }[] = [
 
 const PREVIEW_MAILTO = "mailto:rohanpxquantum@gmail.com?subject=Svaar%20preview";
 
-const features = [
+type Feature = {
+  title: string;
+  body?: string;
+  diagram?: { src: string; width: number; height: number; alt: string };
+};
+
+const features: Feature[] = [
   {
     title: "Ask What Happened. Every Claim, Checked.",
-    body: "When a pipeline breaks, ask Svaar in chat or on a call and hear the incident rebuilt from recorded events, in order, with the step that failed. When someone says the fix is merged, Svaar looks for the merge, and if the evidence is missing it calls that person and asks. A missed call never counts against anyone.",
+    // Shown as a diagram; the sentence stays as the image's description.
+    diagram: {
+      src: "/features/pipeline.png",
+      width: 1774,
+      height: 440,
+      alt: "A pipeline fails at one step. Svaar rebuilds what happened, checks the claimed fix against evidence, and calls the person to ask when the evidence is missing, before the pipeline goes green.",
+    },
   },
   {
     title: "Understands What You Actually Mean.",
-    body: "Svaar interprets ambiguous, informal client requests and infers the intent behind them. It traces requirements across previous conversations to pin down the exact task, pulls in the relevant context, and routes it to the right person to get it done.",
+    diagram: {
+      src: "/features/routing.png",
+      width: 1293,
+      height: 620,
+      alt: "Requests from several people flow into Svaar, which works out the intended task from past conversations and routes it onward to a ticket, an email or a phone call.",
+    },
   },
   {
     title: "It Calls When Nobody Answers.",
-    body: "Svaar alerts the owner in team chat the moment CI fails. If nobody acknowledges in time, it phones them, explains what broke in two plain sentences, and lets them acknowledge right there on the call.",
+    diagram: {
+      src: "/features/fallback.png",
+      width: 1760,
+      height: 521,
+      alt: "CI fails and Svaar alerts the owner in chat. When nobody acknowledges in time, it calls them, explains what broke, and lets them acknowledge on the call or in chat.",
+    },
   },
 ];
 
-const cards = [
-  {
-    title: "Vague Requests, Clear Tasks.",
-    body: "Informal asks become a defined task, with context from past conversations and the right owner attached.",
-  },
-  {
-    title: "One Agent, Chat and Voice.",
-    body: "Team chat and phone calls reach the same agent, the same tools and the same rules. Pick up wherever you are.",
-  },
-  {
-    title: "Verified, Every Time.",
-    body: "People join with single-use invites, and phones are verified by a code read aloud on a call. Nobody gets in by claiming to be someone.",
-  },
-  {
-    title: "Risky Actions Wait for You.",
-    body: "Reruns and other risky actions need a one-time code from the owner on a second channel. They run once, and only once.",
-  },
-  {
-    title: "Validated Plans, Simulated First.",
-    body: "Freezes, on-call coverage and deploy slots become a plan that passes every hard rule, then a clearly labelled sandbox run before anything touches production.",
-  },
-  {
-    title: "Every Decision on Record.",
-    body: "Each decision and each action is written down with its reason, so you can always see what Svaar did and why.",
-  },
-];
-
-// Phone version: the six cards above merged into three, one short line each.
-const compactCards = [
-  {
-    title: "One Agent, Any Channel.",
-    body: "Vague asks become clear tasks, in chat or on a call.",
-  },
-  {
-    title: "Verified Before It Runs.",
-    body: "Verified people. Risky actions need the owner's code.",
-  },
-  {
-    title: "Tested, Then Recorded.",
-    body: "Plans pass every rule and a sandbox. Every decision is logged.",
-  },
+// The six capability cards. Titles only for now; a line under each can be added
+// with a `body`.
+const cards: { title: string; body?: string }[] = [
+  { title: "Completely Automating AI Loop Engineering" },
+  { title: "Auto-Intelligence Layer Model Switching" },
+  { title: "Smart Context Compiler" },
+  { title: "Smart Instruction Decomposition" },
+  { title: "Intelligent Ticket Assignment" },
+  { title: "Multi-Channel Client-Team Coordination Engine" },
 ];
 
 function Channels() {
@@ -131,7 +122,18 @@ export default function Home() {
         {features.map((feature) => (
           <article key={feature.title} className={styles.feature}>
             <h3>{feature.title}</h3>
-            <p>{feature.body}</p>
+            {feature.diagram ? (
+              <Image
+                src={feature.diagram.src}
+                alt={feature.diagram.alt}
+                width={feature.diagram.width}
+                height={feature.diagram.height}
+                sizes="(max-width: 960px) 100vw, 900px"
+                className={styles.featureDiagram}
+              />
+            ) : (
+              <p>{feature.body}</p>
+            )}
           </article>
         ))}
       </section>
@@ -139,22 +141,16 @@ export default function Home() {
       {/* In the ending, only the channel icons are white. */}
       <div className={styles.finale}>
         <section id="safety" className={styles.cardsSection} aria-label="How Svaar keeps you safe">
-          {/* Six cards on larger screens; three short merged ones on phones. */}
-          <div className={`${styles.cards} ${styles.cardsFull}`}>
-            {cards.map((card) => (
-              <article key={card.title} className={styles.card}>
+          {/* Six cards on larger screens; phones skip the cards entirely. */}
+          {/* Wide screens: a winding trail of six cards joined by a dashed line. */}
+          <div className={`${styles.cards} ${styles.cardsFull} ${styles.trail}`}>
+            {cards.map((card, index) => (
+              <article key={card.title} className={`${styles.card} ${styles[`step${index + 1}`]}`}>
                 <h4>{card.title}</h4>
-                <p>{card.body}</p>
+                {card.body ? <p>{card.body}</p> : null}
               </article>
             ))}
-          </div>
-          <div className={`${styles.cards} ${styles.cardsCompact}`}>
-            {compactCards.map((card) => (
-              <article key={card.title} className={styles.card}>
-                <h4>{card.title}</h4>
-                <p>{card.body}</p>
-              </article>
-            ))}
+            <CardTrail />
           </div>
         </section>
 
