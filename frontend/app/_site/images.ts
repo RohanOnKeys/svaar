@@ -36,7 +36,7 @@ export const images = {
   },
   scenarioCi: {
     id: "IMG-03",
-    file: "scenario-ci.png",
+    file: "scenario-ci-v2.jpg",
     width: 800,
     height: 600,
     page: "/try",
@@ -62,16 +62,6 @@ export const images = {
     alt: "A loose client message turning into a neat task card with an owner.",
     brief:
       "A messy, informal chat bubble on the left becoming a tidy task card with a small person avatar on the right. Same flat style.",
-  },
-  integrationsHero: {
-    id: "IMG-09",
-    file: "integrations-hero.png",
-    width: 1600,
-    height: 600,
-    page: "/console/integrations",
-    alt: "The swan mark at the centre of a ring of channel symbols.",
-    brief:
-      "The swan in the middle, with simple generic symbols for mail, phone, chat and code around it, joined by thin lines. No third-party logos.",
   },
 } satisfies Record<string, ImageSpec>;
 

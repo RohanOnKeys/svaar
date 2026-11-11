@@ -12,11 +12,14 @@ export default function ImageSlot({
   name,
   className,
   optional = false,
+  label,
 }: {
   name: ImageKey;
   className?: string;
   /** Render nothing (instead of a placeholder box) until the real image exists. */
   optional?: boolean;
+  /** Big text shown in the placeholder instead of the file details, e.g. "TBA". */
+  label?: string;
 }) {
   const spec = images[name];
   const ratio = `${spec.width} / ${spec.height}`;
@@ -40,12 +43,18 @@ export default function ImageSlot({
   return (
     <figure className={`${classes} ${styles.slotEmpty}`} style={{ aspectRatio: ratio }}>
       <figcaption>
+        {label ? (
+          <span className={styles.slotLabel}>{label}</span>
+        ) : (
+          <>
         <strong>
           {spec.id} · {spec.file}
         </strong>
         <span>
           {spec.width} × {spec.height}
         </span>
+          </>
+        )}
       </figcaption>
     </figure>
   );

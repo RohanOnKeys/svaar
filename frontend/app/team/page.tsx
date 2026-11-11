@@ -25,7 +25,7 @@ const team: {
   },
   {
     name: "Soumya Ranjan Panda",
-    photo: "/team/soumya.png",
+    photo: "/team/soumya-v2.png",
     color: "#111",
     email: "pandaranjan314@gmail.com",
     linkedin: "https://www.linkedin.com/in/soumya-ranjan-panda-802b1a331/",
@@ -39,7 +39,7 @@ const team: {
   },
   {
     name: "Shreya Mishra",
-    photo: "/team/shreya-v3.png",
+    photo: "/team/shreya-v4.png",
     color: "#0c4450",
     email: "shreyamishra2k05@gmail.com",
     linkedin: "https://www.linkedin.com/in/shreya-mishra-developer/",
@@ -49,8 +49,8 @@ const team: {
 export default function TeamPage() {
   return (
     <div className={styles.shell}>
-      {/* Same video as the landing page, turned upright on phones. */}
-      <PageVideo wide="/background.mp4" tall={null} />
+      {/* A wide clip: as-is on desktop, turned upright on phones. */}
+      <PageVideo wide="/team-bg-v2.mp4" tall={null} />
       <SiteHeader />
       <main className={styles.main}>
         <h1 className={styles.visuallyHidden}>Team</h1>

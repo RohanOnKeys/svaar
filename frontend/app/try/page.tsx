@@ -57,7 +57,14 @@ export default function TryPage() {
               body: scenario.body,
               // Only "A build breaks" has a live trigger so far.
               run: index === 0 ? "/break" : undefined,
-              image: <ImageSlot name={scenario.image} className={styles.cardImage} />,
+              // The first card keeps its image placeholder; the others say TBA.
+              image: (
+                <ImageSlot
+                  name={scenario.image}
+                  className={styles.cardImage}
+                  label={index === 0 ? undefined : "TBA"}
+                />
+              ),
             }))}
           />
         </section>

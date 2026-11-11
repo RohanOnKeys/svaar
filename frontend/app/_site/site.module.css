@@ -197,6 +197,20 @@
   font-size: 13px;
 }
 
+/* Big, plain grey placeholder text such as "TBA", centred in the image area. */
+.slotEmpty .slotLabel {
+  display: block;
+  width: 100%;
+  color: rgba(18, 18, 18, 0.4);
+  font-size: clamp(44px, 6vw, 76px);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-align: center;
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+}
+
 .slotEmpty strong {
   color: var(--ink-soft);
   font-weight: 400;
@@ -617,31 +631,43 @@
   text-shadow: none;
 }
 
+/* Just the white icon (or the Google photo): no circle, border, fill or padding. */
 .profileButton {
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
   padding: 0;
-  overflow: hidden;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  background: var(--ink);
+  border: 0;
+  background: none;
   color: #fff;
   font: inherit;
-  font-size: 20px;
+  font-size: 15px;
+  line-height: 0;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(18, 18, 18, 0.25);
+  /* Same soft shadow as the white channel icons on the landing page. */
+  filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.35));
+  transition: opacity 160ms ease;
+}
+
+.profileButton:hover {
+  opacity: 0.75;
 }
 
 .profileButton svg {
-  font-size: 26px;
+  width: 30px;
+  height: 30px;
 }
 
 .profileButton img {
-  width: 100%;
-  height: 100%;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
   object-fit: cover;
+}
+
+/* Fallback initial when the Google photo can't load. */
+.profileButton span {
+  color: #fff;
+  line-height: 1;
 }
 
 .profileButton:focus-visible {
