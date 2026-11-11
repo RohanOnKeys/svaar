@@ -16,7 +16,7 @@ const channels: { label: string; icon: IconType }[] = [
   { label: "Telegram", icon: FaTelegramPlane },
 ];
 
-const PREVIEW_MAILTO = "mailto:rohanpxquantum@gmail.com?subject=Svaar%20preview";
+const PREVIEW_MAILTO = "mailto:robinnxander@zohomail.com?subject=Svaar%20preview";
 
 type Feature = {
   title: string;
