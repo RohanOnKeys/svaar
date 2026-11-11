@@ -2,7 +2,7 @@
 
 import { onAuthStateChanged, signOut, type User } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { FcGoogle } from "react-icons/fc";
+import { FaGoogle } from "react-icons/fa";
 import { firebaseAuth, firebaseConfigured, signInWithGoogle } from "../_site/firebase";
 import styles from "./try.module.css";
 import IncidentPanel from "./incident-panel";
@@ -99,9 +99,14 @@ export default function SignUp() {
   if (stage === "signed-out" || !user) {
     return (
       <div className={`${styles.panel} ${styles.form}`}>
-        <button type="button" className={styles.googleButton} onClick={signIn}>
-          <FcGoogle aria-hidden="true" />
-          Continue with Google
+        <button
+          type="button"
+          className={styles.googleButton}
+          onClick={signIn}
+          aria-label="Continue with Google"
+          title="Continue with Google"
+        >
+          <FaGoogle aria-hidden="true" />
         </button>
         <p className={styles.muted}>Google confirms your email. Nothing is posted anywhere.</p>
         {error ? <p role="alert">{error}</p> : null}
