@@ -2,6 +2,9 @@
   --ink: #121212;
   --ink-soft: #1c1c1c;
   --icon: #121212;
+  --ink-faint: #5b4d47;
+  --rule: rgba(18, 18, 18, 0.12);
+  --surface: rgba(255, 248, 244, 0.62);
   --gutter: clamp(16px, 5vw, 76px);
 }
 

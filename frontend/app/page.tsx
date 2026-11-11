@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { IconType } from "react-icons";
 import { FaDiscord, FaEnvelope, FaPhoneAlt, FaSlack, FaTelegramPlane } from "react-icons/fa";
 import styles from "./page.module.css";
@@ -97,6 +98,9 @@ export default function Home() {
       <BackgroundVideo watch="splash" />
 
       <section id="splash" className={styles.splash}>
+        <nav className={styles.topNav} aria-label="Site">
+          <Link href="/team">Team</Link>
+        </nav>
         <h1 className={styles.splashBrand}>
           <Image
             src="/swan.png"

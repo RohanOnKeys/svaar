@@ -3,6 +3,8 @@
   isolation: isolate;
   /* clip, not hidden: hidden would create a scroll container and break sticky. */
   overflow-x: clip;
+  /* A very light, thin white edge on every line of text on the landing page. */
+  text-shadow: 0 0 1.5px rgba(255, 255, 255, 0.35);
 }
 
 /* Fixed so the background video sits behind every section. It bleeds past the
@@ -53,6 +55,33 @@
   display: grid;
   place-items: center;
   padding: 0 var(--gutter);
+}
+
+/* A plain text menu in the top corner of the large header. */
+.topNav {
+  position: absolute;
+  top: clamp(16px, 3vw, 32px);
+  right: var(--gutter);
+  display: flex;
+  gap: clamp(18px, 2.6vw, 34px);
+}
+
+.topNav a {
+  padding: 4px 0;
+  color: var(--ink);
+  font-size: clamp(15px, 1.3vw, 18px);
+  text-decoration: none;
+  border-bottom: 1.5px solid transparent;
+  transition: border-color 160ms ease;
+}
+
+.topNav a:hover {
+  border-bottom-color: var(--ink);
+}
+
+.topNav a:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
 }
 
 .splashBrand {
@@ -123,7 +152,6 @@
   color: var(--ink);
   font-size: clamp(17px, 1.75vw, 25px);
   line-height: 1.38;
-  text-shadow: 0 0 18px rgba(255, 244, 238, 0.55);
 }
 
 .channels {
@@ -172,15 +200,6 @@
   background-color: var(--ink);
   color: #fff8f4;
   text-shadow: none;
-}
-
-/* Content sits directly on the background; a soft glow keeps it readable. */
-
-.features,
-.cards,
-.closing,
-.footer {
-  text-shadow: 0 0 16px rgba(255, 244, 238, 0.7);
 }
 
 .features {
