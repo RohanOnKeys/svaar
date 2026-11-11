@@ -100,7 +100,7 @@ export default function Home() {
             alt=""
             width={894}
             height={868}
-            priority
+            preload
             className={styles.splashSwan}
           />
           <span className={styles.splashWordmark}>vaar</span>
@@ -126,6 +126,7 @@ export default function Home() {
                 width={feature.diagram.width}
                 height={feature.diagram.height}
                 sizes="(max-width: 960px) 100vw, 900px"
+                loading="eager"
                 className={styles.featureDiagram}
               />
             ) : (

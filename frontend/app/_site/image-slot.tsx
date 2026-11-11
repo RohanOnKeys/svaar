@@ -34,6 +34,7 @@ export default function ImageSlot({
         height={spec.height}
         className={classes}
         style={{ aspectRatio: ratio }}
+        loading="eager"
       />
     );
   }

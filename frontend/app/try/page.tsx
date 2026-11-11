@@ -23,7 +23,7 @@ export default function TryPage() {
     <div className={styles.page}>
       {/* Background video, with a still of the landing background underneath while it loads. */}
       <div className={styles.background} aria-hidden="true">
-        <Image src="/try-still-v1.jpg" alt="" fill priority sizes="100vw" />
+        <Image src="/try-still-v1.jpg" alt="" fill preload sizes="100vw" />
         <TryVideo src="/try-bg-v1.mp4" />
       </div>
       <SiteHeader />

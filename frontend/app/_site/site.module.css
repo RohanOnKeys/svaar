@@ -727,7 +727,7 @@
 
   /* Phones: one photo after another, centred, with room between them. */
   .team {
-    grid-template-columns: minmax(0, min(240px, 66vw));
+    grid-template-columns: minmax(0, min(170px, 48vw));
     justify-content: center;
     gap: 56px;
     margin-top: 40px;

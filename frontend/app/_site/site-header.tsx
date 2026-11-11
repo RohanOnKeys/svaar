@@ -17,7 +17,14 @@ export default function SiteHeader() {
   return (
     <header className={styles.header}>
       <Link href="/" className={styles.brand}>
-        <Image src="/swan.png" alt="" width={894} height={868} className={styles.brandMark} />
+        <Image
+          src="/swan.png"
+          alt=""
+          width={894}
+          height={868}
+          className={styles.brandMark}
+          loading="eager"
+        />
         <span>Svaar</span>
       </Link>
       <nav className={styles.nav} aria-label="Site">

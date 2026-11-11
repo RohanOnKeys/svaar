@@ -63,7 +63,9 @@ export default function TeamPage() {
                 alt={member.name}
                 width={600}
                 height={600}
-                sizes="(max-width: 760px) 50vw, 260px"
+                sizes="(max-width: 760px) 170px, 300px"
+                // Load straight away (not when scrolled to), so phones don't wait.
+                loading="eager"
                 className={
                   member.mirrored
                     ? `${styles.memberPhoto} ${styles.memberPhotoMirrored}`
