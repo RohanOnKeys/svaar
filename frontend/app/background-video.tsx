@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { playWhenAllowed } from "./autoplay";
 import styles from "./page.module.css";
 
 // Strongest blur at the bottom of the page, in pixels; kept gentle on purpose.
@@ -26,15 +27,22 @@ export default function BackgroundVideo({ watch }: { watch: string }) {
     if (!element || !target) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+    // Phones may refuse to autoplay; playWhenAllowed retries on the first gesture.
+    let cancelRetry = () => {};
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
-        element.play().catch(() => {});
+        cancelRetry();
+        cancelRetry = playWhenAllowed(element);
       } else {
+        cancelRetry();
         element.pause();
       }
     });
     observer.observe(target);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      cancelRetry();
+    };
   }, [watch]);
 
   useEffect(() => {

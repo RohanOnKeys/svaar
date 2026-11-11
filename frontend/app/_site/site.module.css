@@ -553,16 +553,11 @@
 }
 
 /* Sharp-cornered burgundy symbols, no badge or padding around them. */
-/* Each person's icons take their sticker's colour, with a thin outline around them. */
+/* Each person's icons take their sticker's colour; no outline. */
 .memberIcon {
   display: block;
   color: var(--icon-fill, #6d1a2c);
   line-height: 0;
-  --w: var(--icon-edge-width, 0.5px);
-  filter: drop-shadow(var(--w) 0 0 var(--icon-edge, #000))
-    drop-shadow(calc(-1 * var(--w)) 0 0 var(--icon-edge, #000))
-    drop-shadow(0 var(--w) 0 var(--icon-edge, #000))
-    drop-shadow(0 calc(-1 * var(--w)) 0 var(--icon-edge, #000));
   transition: opacity 160ms ease;
 }
 
