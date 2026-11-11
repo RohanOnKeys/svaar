@@ -35,17 +35,6 @@
   }
 }
 
-.background::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    ellipse 60% 45% at 50% 52%,
-    rgba(255, 245, 240, 0.32),
-    rgba(255, 245, 240, 0) 70%
-  );
-}
-
 /* Splash: the first screen, a large centred logo. */
 
 .splash {
@@ -300,7 +289,6 @@
 .finale .contact {
   filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.35));
 }
-
 
 /* Sits right under the channels: together they are the page's closing block. */
 .footer {

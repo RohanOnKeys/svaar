@@ -8,16 +8,17 @@ const PORTRAIT = "(orientation: portrait)";
 
 /**
  * Fixed background video for the inner pages. Landscape screens get `wide`; portrait
- * screens (phones) get `tall` when there is one, otherwise `wide` turned upright.
+ * screens (phones) get `tall`. With only one of the two, that clip is turned 90° on
+ * the other kind of screen, so it always fills it.
  * Only the clip in use is downloaded. Playback is started from code so phones that
  * block autoplay still start it on the first tap. Reduced-motion visitors get a
  * still frame.
  */
 export default function PageVideo({
-  wide = "/pages-wide.mp4",
-  tall = "/pages-tall.mp4",
+  wide = null,
+  tall = null,
 }: {
-  wide?: string;
+  wide?: string | null;
   tall?: string | null;
 }) {
   const video = useRef<HTMLVideoElement>(null);
@@ -33,8 +34,8 @@ export default function PageVideo({
     return () => query.removeEventListener("change", pick);
   }, []);
 
-  const src = portrait === null ? null : portrait && tall ? tall : wide;
-  const rotate = portrait === true && !tall;
+  const src = portrait === null ? null : portrait ? (tall ?? wide) : (wide ?? tall);
+  const rotate = portrait === null ? false : portrait ? !tall : !wide;
 
   useEffect(() => {
     const element = video.current;

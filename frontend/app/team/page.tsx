@@ -18,7 +18,7 @@ const team: {
 }[] = [
   {
     name: "Rohan Pattanayak",
-    photo: "/team/rohan.png",
+    photo: "/team/rohan-v2.png",
     color: "#f5f4f2",
     email: "rohanpxquantum@gmail.com",
     linkedin: "https://www.linkedin.com/in/rohan-a142a1284/",

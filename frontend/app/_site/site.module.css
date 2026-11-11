@@ -34,14 +34,6 @@
   transform: translate(-50%, -50%) rotate(90deg);
 }
 
-/* A soft peach veil keeps text and tables readable over the moving picture. */
-.pageVideo::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(233, 214, 204, 0.42);
-}
-
 /* Header */
 
 .header {
@@ -228,6 +220,42 @@
 .buttonSolid {
   background: var(--ink);
   color: #fff8f4;
+}
+
+/* "Continue with Google": white pill with the Google mark, as Google's guidelines ask. */
+.googleButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 11px 22px;
+  border: 1px solid rgba(18, 18, 18, 0.25);
+  border-radius: 999px;
+  background: #fff;
+  color: #1f1f1f;
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+  text-shadow: none;
+}
+
+.googleButton svg {
+  font-size: 20px;
+}
+
+.googleButton:hover {
+  background: #f6f6f6;
+}
+
+.linkButton {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink-faint);
+  font: inherit;
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .form {
@@ -574,6 +602,72 @@
 .memberIcon:focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 3px;
+}
+
+/* Profile: a round button fixed in the bottom-right corner, with a small card above. */
+.profile {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: clamp(16px, 3vw, 32px);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  text-shadow: none;
+}
+
+.profileButton {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  overflow: hidden;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  font: inherit;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(18, 18, 18, 0.25);
+}
+
+.profileButton svg {
+  font-size: 26px;
+}
+
+.profileButton img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profileButton:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.profileCard {
+  display: grid;
+  gap: 6px;
+  min-width: 220px;
+  max-width: min(320px, calc(100vw - 32px));
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: #fffaf7;
+  box-shadow: 0 10px 30px rgba(18, 18, 18, 0.18);
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+
+.profileCard .button {
+  justify-self: start;
+  margin-top: 6px;
+  cursor: pointer;
 }
 
 .visuallyHidden {

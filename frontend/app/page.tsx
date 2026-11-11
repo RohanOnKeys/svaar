@@ -90,6 +90,8 @@ export default function Home() {
 
       <section id="splash" className={styles.splash}>
         <nav className={styles.topNav} aria-label="Site">
+          <Link href="/try">Try</Link>
+          <Link href="/console">Console</Link>
           <Link href="/team">Team</Link>
         </nav>
         <h1 className={styles.splashBrand}>

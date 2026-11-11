@@ -5,6 +5,8 @@ import styles from "./page.module.css";
 
 type Point = [number, number];
 
+// Sampled from the reddish neon glow in the three feature diagrams.
+const TRAIL_COLOR = "#FF8EA6";
 const GAP = 14; // Space left between the line and a card.
 const TITLE = 13; // Height of a card's title line, where the line leaves a card.
 const RADIUS = 14; // Corner rounding, in pixels.
@@ -109,12 +111,7 @@ export default function CardTrail() {
       focusable="false"
     >
       <defs>
-        <linearGradient id="card-trail" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2={shape?.h ?? 1}>
-          <stop offset="0" stopColor="#332C2C" />
-          <stop offset="0.4" stopColor="#572332" />
-          <stop offset="0.72" stopColor="#722F40" />
-          <stop offset="1" stopColor="#2A9D8F" />
-        </linearGradient>
+        {/* The same pink as the reddish glow in the feature diagrams above. */}
         {/* Neon glow to match the diagrams: a tight and a wide blur under the line. */}
         <filter
           id="card-trail-glow"
@@ -138,13 +135,13 @@ export default function CardTrail() {
           <path
             d={shape.d}
             fill="none"
-            stroke="url(#card-trail)"
+            stroke={TRAIL_COLOR}
             strokeWidth="3"
             strokeDasharray="10 9"
             strokeLinecap="round"
           />
           {shape.dots.map(([x, y], index) => (
-            <circle key={index} cx={x} cy={y} r="5" fill="url(#card-trail)" />
+            <circle key={index} cx={x} cy={y} r="5" fill={TRAIL_COLOR} />
           ))}
         </g>
       ) : null}

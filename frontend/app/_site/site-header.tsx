@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 import styles from "./site.module.css";
 
 const links = [
+  { href: "/try", label: "Try" },
+  { href: "/console", label: "Console" },
   { href: "/team", label: "Team" },
 ];
 

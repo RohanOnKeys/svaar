@@ -1,0 +1,412 @@
+/* Try page: the landing page's open look. Text sits directly on a still of the
+   landing background; no boxes, panels or cards. The pink is the reddish glow
+   of the feature diagrams and the landing card trail. */
+
+.page {
+  --pink: #ff8ea6;
+  --pink-deep: #e0607f;
+  --burgundy: #6d1a2c;
+  /* All text in one colour: the same ink as the "Signed in as" line. */
+  --ink-faint: var(--ink);
+  --ink-soft: var(--ink);
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  text-shadow: 0 0 1.5px rgba(255, 255, 255, 0.35);
+}
+
+/* Selected text is highlighted in burgundy. */
+.page ::selection {
+  background: var(--burgundy);
+  color: #fff;
+  text-shadow: none;
+}
+
+/* A still frame of the landing video, fixed behind the whole page. */
+.background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+}
+
+.background img {
+  object-fit: cover;
+  object-position: center 60%;
+}
+
+/* The vertical background clip: upright on phones (portrait screens)… */
+.bgVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* …and turned sideways to fill wide screens. */
+@media (orientation: landscape) {
+  .bgVideo {
+    inset: auto;
+    top: 50%;
+    left: 50%;
+    width: 100vh;
+    height: 100vw;
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+}
+
+.main {
+  flex: 1;
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: clamp(24px, 5vw, 56px) var(--gutter) clamp(72px, 10vw, 140px);
+}
+
+/* Hero: centred, like the landing tagline. */
+
+.hero {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  padding: clamp(32px, 8vw, 96px) 0 clamp(16px, 4vw, 40px);
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--ink-faint);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(44px, 7.5vw, 104px);
+  font-weight: 400;
+  line-height: 1.02;
+}
+
+.lede {
+  max-width: 640px;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: clamp(17px, 1.6vw, 21px);
+  line-height: 1.5;
+}
+
+.section {
+  margin-top: clamp(72px, 11vw, 150px);
+}
+
+.sectionTitle {
+  margin: 0 0 clamp(28px, 4vw, 48px);
+  font-size: clamp(26px, 3.2vw, 42px);
+  font-weight: 400;
+  text-align: center;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+  gap: clamp(40px, 6vw, 96px);
+  align-items: start;
+}
+
+/* Shared building blocks used by the sign-up and live components. */
+
+.panel {
+  /* Open on purpose: no border, background or radius. */
+}
+
+.panel h3 {
+  margin: 0 0 4px;
+  font-size: clamp(22px, 2.2vw, 28px);
+  font-weight: 400;
+}
+
+.form {
+  display: grid;
+  gap: 20px;
+}
+
+.stack {
+  display: grid;
+  gap: clamp(40px, 5vw, 64px);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  margin: 0;
+}
+
+.muted {
+  color: var(--ink-faint);
+}
+
+.field {
+  display: grid;
+  gap: 4px;
+  color: var(--ink-faint);
+  font-size: 14px;
+}
+
+/* Underlined fields instead of boxes. */
+.field input {
+  padding: 10px 2px 8px;
+  border: 0;
+  border-bottom: 1.5px solid rgba(18, 18, 18, 0.35);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 19px;
+  transition: border-color 160ms ease;
+}
+
+.field input:focus {
+  outline: none;
+  border-bottom-color: var(--burgundy);
+  box-shadow: 0 1.5px 0 var(--burgundy);
+}
+
+.field input::placeholder {
+  color: rgba(18, 18, 18, 0.45);
+}
+
+/* Browsers paint autofilled fields pale blue or yellow; keep them transparent. */
+.field input:-webkit-autofill,
+.field input:-webkit-autofill:hover,
+.field input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--ink);
+  caret-color: var(--ink);
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+
+.field input:autofill {
+  background: transparent;
+}
+
+.field input[aria-invalid="true"] {
+  border-bottom-color: #b5372b;
+}
+
+/* Pills, like "Book a preview" on the landing page. */
+.button,
+.buttonSolid {
+  display: inline-block;
+  padding: 10px 22px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+  text-shadow: none;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.button:hover,
+.buttonSolid {
+  background: var(--ink);
+  color: #fff8f4;
+}
+
+.buttonSolid:hover {
+  background: #3a2a2e;
+  border-color: #3a2a2e;
+}
+
+.button:disabled,
+.buttonSolid:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.button:disabled:hover {
+  background: transparent;
+  color: var(--ink);
+}
+
+.googleButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  justify-self: start;
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  color: #1f1f1f;
+  font: inherit;
+  font-size: 17px;
+  cursor: pointer;
+  text-shadow: none;
+  box-shadow: 0 2px 14px rgba(224, 96, 127, 0.25);
+}
+
+.googleButton svg {
+  font-size: 21px;
+}
+
+.googleButton:hover {
+  box-shadow: 0 4px 20px rgba(224, 96, 127, 0.4);
+}
+
+.linkButton {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink-faint);
+  font: inherit;
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.button:focus-visible,
+.buttonSolid:focus-visible,
+.googleButton:focus-visible,
+.linkButton:focus-visible {
+  outline: 2px solid var(--pink-deep);
+  outline-offset: 3px;
+}
+
+/* Timelines: the landing trail's pink dashed line and glowing dots. */
+.timeline {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 14px;
+  padding: 0 0 22px 26px;
+  border-left: 2px dashed var(--pink);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Steps: one column, no labels; the dashed line and dots show the order. */
+.steps li {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.timeline li:last-child {
+  padding-bottom: 0;
+  border-left-color: transparent;
+}
+
+.timeline li::before {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--pink);
+  box-shadow: 0 0 10px var(--pink), 0 0 2px var(--pink-deep);
+}
+
+/* Scenario cards: nearly clear, with round corners and a fresnel rim. Each has its
+   image and one button that runs it. */
+.scenarios {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: clamp(20px, 3vw, 36px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(18px, 2vw, 24px);
+  border-radius: 24px;
+  /* Almost fully clear: the background shows straight through. */
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Fresnel rim: a thin shine that catches the corners and fades to nothing along the
+   sides, like light on the edge of glass. No solid border anywhere. */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.85),
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0) 70%,
+    rgba(255, 255, 255, 0.55)
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+.card h3 {
+  margin: 0 0 8px;
+  font-size: clamp(20px, 1.9vw, 24px);
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+.card > p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Image area: soft and rounded; a gentle dashed pink outline until the image exists. */
+.cardImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  border-color: rgba(255, 255, 255, 0.45);
+  background: transparent;
+}
+
+.cardAction {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  margin-top: auto;
+  padding-top: 18px;
+}
+
+.cardNote {
+  margin: 0;
+  color: var(--ink-faint);
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .timeline li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+}
