@@ -5,6 +5,7 @@ from collections.abc import AsyncIterator, Callable
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session, sessionmaker
 from starlette.concurrency import run_in_threadpool
 
@@ -149,6 +150,8 @@ def create_app(settings: Settings | None = None, *, status_ingress: bool = False
     app.state.voice_requester_notifier = enqueue_claim_check_failure
     app.state.settings = settings
     install_error_handlers(app)
+    if not status_ingress:
+        allow_trial_websites(app, settings)
     if status_ingress:
         app.include_router(voice_status_router, prefix="/api/v1")
     else:
@@ -157,6 +160,19 @@ def create_app(settings: Settings | None = None, *, status_ingress: bool = False
     if settings.voice_turn_mode is not None:
         app.include_router(turn_router(settings.voice_turn_mode), prefix="/api/v1")
     return app
+
+
+def allow_trial_websites(app: FastAPI, settings: Settings) -> None:
+    """Let only the configured websites (the Try page) call the API from a browser."""
+    origins = [o.strip() for o in settings.trial_allowed_origins.split(",") if o.strip()]
+    if origins:
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=origins,
+            allow_methods=["GET", "POST"],
+            allow_headers=["Authorization", "Content-Type"],
+            max_age=600,
+        )
 
 
 def create_status_ingress(settings: Settings | None = None) -> FastAPI:

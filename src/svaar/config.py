@@ -33,6 +33,13 @@ class Settings(BaseSettings):
     # Operator routes only; voice, channel and webhook routes use separate credentials.
     operator_token: SecretStr | None = None
 
+    # Self-serve website demo ("Try Svaar"). Off by default; when on, a verified Google
+    # sign-in for this Firebase project may create that person's own demo team.
+    trial_enabled: bool = False
+    firebase_project_id: str | None = Field(default=None, pattern=r"^[a-z0-9-]{4,40}$")
+    # Comma-separated website origins allowed to call the API from a browser.
+    trial_allowed_origins: str = ""
+
     # One optional model configuration serves chat and voice. All three or none.
     llm_base_url: str | None = None
     llm_api_key: SecretStr | None = None

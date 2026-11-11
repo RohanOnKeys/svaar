@@ -9,10 +9,11 @@ from fastapi import FastAPI
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from svaar.api.health import router as health_router
-from svaar.app import create_app
+from svaar.app import allow_trial_websites, create_app
 from svaar.config import Settings
 from svaar.integrations.routes import github_webhook
 from svaar.render_start import render_hostname
+from svaar.trial.routes import router as trial_router
 
 
 def create_render_app(settings: Settings | None = None) -> FastAPI:
@@ -32,5 +33,10 @@ def create_render_app(settings: Settings | None = None) -> FastAPI:
     app.state.render_status_ingress = True
     app.add_api_route("/api/v1/webhooks/github", github_webhook, methods=["POST"])
     app.include_router(health_router)
+    if settings.trial_enabled and settings.firebase_project_id:
+        # The website demo: Google-token-authenticated routes, callable only from the
+        # configured websites. Absent entirely unless the trial is switched on.
+        app.include_router(trial_router, prefix="/api/v1")
+        allow_trial_websites(app, settings)
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=[hostname])
     return app

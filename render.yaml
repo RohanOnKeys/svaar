@@ -43,3 +43,10 @@ services:
         value: "false"
       - key: SVAAR_CLAIM_CHECK_JOBS_ENABLED
         value: "false"
+      # Website demo (/try): Google sign-in via Firebase, callable only from the site.
+      - key: SVAAR_TRIAL_ENABLED
+        value: "true"
+      - key: SVAAR_FIREBASE_PROJECT_ID
+        value: svaarbolna
+      - key: SVAAR_TRIAL_ALLOWED_ORIGINS
+        value: https://svaar.vercel.app

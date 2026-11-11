@@ -69,6 +69,37 @@ def test_render_isolation_and_host_validation(render_environment, render_setting
         )
 
 
+def test_trial_routes_absent_unless_enabled(render_environment, render_settings):
+    with TestClient(
+        create_render_app(render_settings), base_url="https://svaar-check.onrender.com"
+    ) as client:
+        assert client.post("/api/v1/try/session", json={}).status_code == 404
+
+
+def test_trial_routes_and_website_access_when_enabled(render_environment, render_settings):
+    settings = render_settings.model_copy(
+        update={
+            "trial_enabled": True,
+            "firebase_project_id": "svaar-test-project",
+            "trial_allowed_origins": "https://svaar.vercel.app",
+        }
+    )
+    with TestClient(
+        create_render_app(settings), base_url="https://svaar-check.onrender.com"
+    ) as client:
+        assert client.post("/api/v1/try/session", json={}).status_code == 401
+        preflight = client.options(
+            "/api/v1/try/session",
+            headers={
+                "Origin": "https://svaar.vercel.app",
+                "Access-Control-Request-Method": "POST",
+                "Access-Control-Request-Headers": "authorization,content-type",
+            },
+        )
+        assert preflight.headers.get("access-control-allow-origin") == "https://svaar.vercel.app"
+        assert client.post("/api/v1/orgs", json={}).status_code == 404
+
+
 @pytest.mark.parametrize(
     "headers,expected",
     [
