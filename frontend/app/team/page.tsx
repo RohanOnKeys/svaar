@@ -32,18 +32,17 @@ const team: {
   },
   {
     name: "Suneeti Aryaa",
-    photo: "/team/suneeti.png",
-    color: "#440a13",
+    photo: "/team/suneeti-v3.png",
+    color: "#490711",
     email: "suneetiaryaa@gmail.com",
     linkedin: "https://www.linkedin.com/in/suneeti-aryaa-02a3351ba/",
   },
   {
     name: "Shreya Mishra",
-    photo: "/team/shreya.png",
-    color: "#0c3e43",
+    photo: "/team/shreya-v3.png",
+    color: "#0c4450",
     email: "shreyamishra2k05@gmail.com",
     linkedin: "https://www.linkedin.com/in/shreya-mishra-developer/",
-    mirrored: true,
   },
 ];
 
