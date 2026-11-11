@@ -1,18 +1,25 @@
 """Self-serve demo: Google sign-in tokens are verified server-side before any team exists."""
 
+import base64
+import json
 import time
 import uuid
 from collections.abc import Iterator
 from datetime import UTC, datetime
 
+import httpx
 import jwt
 import pytest
+from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 from fastapi.testclient import TestClient
+from pydantic import SecretStr
 
 from svaar.app import create_app
 from svaar.config import Settings
 from svaar.incidents.service import open_manual_incident
+from svaar.integrations.models import RepoMapping
+from svaar.trial.demo_ci import DemoWorkflowClient
 from svaar.trial.firebase import FirebaseVerifier, InvalidSignInError
 
 PROJECT = "svaar-test-project"
@@ -209,3 +216,126 @@ def test_member_sees_and_acknowledges_only_their_own_incident(
     acked = trial_client.post(f"/api/v1/try/incident/{incident_id}/acknowledge", headers=mine)
     assert acked.status_code == 200
     assert acked.json()["state"] == "acknowledged" and acked.json()["acknowledged_at"]
+
+
+# --- "A build breaks": the controlled failing run in the demo repository ---------
+
+APP_KEY_B64 = SecretStr(
+    base64.b64encode(
+        KEY.private_bytes(
+            serialization.Encoding.PEM,
+            serialization.PrivateFormat.TraditionalOpenSSL,
+            serialization.NoEncryption(),
+        )
+    ).decode()
+)
+
+
+def fake_github(seen: list[httpx.Request], dispatch_status: int = 204) -> httpx.MockTransport:
+    def handle(request: httpx.Request) -> httpx.Response:
+        seen.append(request)
+        path = request.url.path
+        if path == "/app/installations/77/access_tokens":
+            return httpx.Response(
+                201, json={"token": "ghs_test", "expires_at": "2099-01-01T00:00:00Z"}
+            )
+        if path == "/repositories/4242":
+            return httpx.Response(200, json={"id": 4242, "full_name": "someone/demo-shop"})
+        if path == "/repos/someone/demo-shop/actions/workflows/svaar-demo.yml/dispatches":
+            return httpx.Response(dispatch_status)
+        return httpx.Response(404)
+
+    return httpx.MockTransport(handle)
+
+
+def demo_client(seen: list[httpx.Request], dispatch_status: int = 204) -> DemoWorkflowClient:
+    return DemoWorkflowClient(
+        app_id=1,
+        private_key_b64=APP_KEY_B64,
+        installation_id=77,
+        repository_id=4242,
+        transport=fake_github(seen, dispatch_status),
+    )
+
+
+def test_demo_client_dispatches_only_the_controlled_failing_run() -> None:
+    seen: list[httpx.Request] = []
+    demo_client(seen).start_failing_run("svaar-demo.yml")
+    token_request = json.loads(seen[0].content)
+    assert token_request == {
+        "repository_ids": [4242],
+        "permissions": {"actions": "write", "metadata": "read"},
+    }
+    dispatch = seen[-1]
+    assert dispatch.method == "POST"
+    assert dispatch.url.path.endswith("/actions/workflows/svaar-demo.yml/dispatches")
+    assert json.loads(dispatch.content) == {"ref": "main", "inputs": {"fail": "true"}}
+
+
+def test_demo_client_reports_a_refused_dispatch() -> None:
+    from svaar.integrations.github_app import GithubUnavailableError
+
+    with pytest.raises(GithubUnavailableError):
+        demo_client([], dispatch_status=422).start_failing_run("svaar-demo.yml")
+
+
+@pytest.mark.parametrize("workflow", ["../evil.yml", "ci", "a b.yml"])
+def test_demo_client_rejects_odd_workflow_names(workflow: str) -> None:
+    with pytest.raises(ValueError):
+        demo_client([]).start_failing_run(workflow)
+
+
+class RecordingClient:
+    def __init__(self) -> None:
+        self.runs: list[str] = []
+
+    def start_failing_run(self, workflow_file: str, ref: str = "main") -> None:
+        self.runs.append(workflow_file)
+
+
+@pytest.fixture
+def break_client(database_url: str, session_factory: object) -> Iterator[TestClient]:
+    settings = Settings(
+        _env_file=None,
+        database_url=database_url,
+        trial_enabled=True,
+        firebase_project_id=PROJECT,
+        trial_demo_repository_id=4242,
+        trial_demo_installation_id=77,
+    )
+    app = create_app(settings)
+    app.state.firebase_verifier = verifier()
+    app.state.demo_workflow_client = RecordingClient()
+    with TestClient(app) as client:
+        yield client
+
+
+@pytest.mark.postgres
+def test_break_links_demo_repo_to_the_clicker_and_starts_one_run(
+    break_client: TestClient, session_factory
+) -> None:
+    mine = {"Authorization": f"Bearer {token()}"}
+    theirs = {"Authorization": f"Bearer {token(sub='other-person', email='d@example.com')}"}
+    me = break_client.post("/api/v1/try/session", json={}, headers=mine).json()
+    them = break_client.post("/api/v1/try/session", json={}, headers=theirs).json()
+
+    started = break_client.post("/api/v1/try/break", headers=mine)
+    assert started.status_code == 202 and started.json()["started"] is True
+    assert break_client.app.state.demo_workflow_client.runs == ["svaar-demo.yml"]
+    with session_factory() as session:
+        mapping = session.get(RepoMapping, 4242)
+        assert str(mapping.org_id) == me["org_id"]
+        assert str(mapping.owner_principal_id) == me["principal_id"]
+
+    assert break_client.post("/api/v1/try/break", headers=mine).status_code == 429
+
+    assert break_client.post("/api/v1/try/break", headers=theirs).status_code == 202
+    with session_factory() as session:
+        assert str(session.get(RepoMapping, 4242).org_id) == them["org_id"]
+
+
+@pytest.mark.postgres
+def test_break_needs_a_team_and_a_configured_demo_repo(trial_client: TestClient) -> None:
+    headers = {"Authorization": f"Bearer {token()}"}
+    trial_client.post("/api/v1/try/session", json={}, headers=headers)
+    assert trial_client.post("/api/v1/try/break", headers=headers).status_code == 503

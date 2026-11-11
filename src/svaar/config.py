@@ -39,6 +39,13 @@ class Settings(BaseSettings):
     firebase_project_id: str | None = Field(default=None, pattern=r"^[a-z0-9-]{4,40}$")
     # Comma-separated website origins allowed to call the API from a browser.
     trial_allowed_origins: str = ""
+    # Dedicated demo repository whose controlled workflow the Try page may start.
+    # Each "break a build" links this repository to the clicking person's demo team.
+    trial_demo_repository_id: int | None = Field(default=None, gt=0)
+    trial_demo_installation_id: int | None = Field(default=None, gt=0)
+    trial_demo_workflow: str = Field(
+        default="svaar-demo.yml", pattern=r"^[A-Za-z0-9_.-]{1,100}\.ya?ml$"
+    )
 
     # One optional model configuration serves chat and voice. All three or none.
     llm_base_url: str | None = None

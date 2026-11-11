@@ -5,6 +5,7 @@ on the server. The routes are unavailable (503) unless the trial feature is enab
 and a Firebase project is configured.
 """
 
+import time
 import uuid
 from datetime import datetime
 from typing import Annotated
@@ -19,8 +20,13 @@ from svaar.api.errors import ErrorResponse
 from svaar.db import get_session
 from svaar.incidents import service as incidents
 from svaar.incidents.service import IncidentNotFoundError
+from svaar.integrations.github_app import GithubUnavailableError
+from svaar.integrations.models import RepoMapping
 from svaar.trial import service
+from svaar.trial.demo_ci import DemoWorkflowClient
 from svaar.trial.firebase import FirebaseVerifier, GoogleIdentity, InvalidSignInError
+
+BREAK_COOLDOWN_SECONDS = 120
 
 SessionDep = Annotated[Session, Depends(get_session)]
 
@@ -164,3 +170,84 @@ def acknowledge_incident(
         raise HTTPException(status.HTTP_404_NOT_FOUND) from None
     session.commit()
     return TrialIncident.model_validate(incident, from_attributes=True)
+
+
+def demo_workflow(request: Request) -> DemoWorkflowClient:
+    """The demo repository client, or 503 when no demo repository is configured."""
+    client = getattr(request.app.state, "demo_workflow_client", None)
+    if client is not None:
+        return client
+    settings = request.app.state.settings
+    if (
+        settings.trial_demo_repository_id is None
+        or settings.trial_demo_installation_id is None
+        or settings.github_app_id is None
+        or settings.github_private_key_b64 is None
+    ):
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE)
+    client = DemoWorkflowClient(
+        app_id=settings.github_app_id,
+        private_key_b64=settings.github_private_key_b64,
+        installation_id=settings.trial_demo_installation_id,
+        repository_id=settings.trial_demo_repository_id,
+    )
+    request.app.state.demo_workflow_client = client
+    return client
+
+
+class BreakStarted(BaseModel):
+    """The controlled failing run was accepted by GitHub."""
+
+    started: bool
+    workflow: str
+
+
+@router.post("/break", response_model=BreakStarted, status_code=status.HTTP_202_ACCEPTED)
+def break_a_build(
+    request: Request,
+    identity: SignedIn,
+    session: SessionDep,
+    client: Annotated[DemoWorkflowClient, Depends(demo_workflow)],
+) -> BreakStarted:
+    """Link the demo repository to this person's team, then start one failing run.
+
+    The repository is a dedicated demo, so it follows whoever last pressed the
+    button; the failure then opens an incident owned by them. One run per person
+    every two minutes.
+    """
+    principal = member_of(identity, session)
+    settings = request.app.state.settings
+    recent = getattr(request.app.state, "trial_breaks", None)
+    if recent is None:
+        recent = request.app.state.trial_breaks = {}
+    now = time.monotonic()
+    last = recent.get(principal.id)
+    if last is not None and now - last < BREAK_COOLDOWN_SECONDS:
+        raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS)
+
+    repository_id = settings.trial_demo_repository_id
+    installation_id = settings.trial_demo_installation_id
+    if repository_id is None or installation_id is None:
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE)
+    mapping = session.get(RepoMapping, repository_id)
+    if mapping is None:
+        session.add(
+            RepoMapping(
+                repository_id=repository_id,
+                installation_id=installation_id,
+                org_id=principal.org_id,
+                owner_principal_id=principal.id,
+            )
+        )
+    else:
+        mapping.installation_id = installation_id
+        mapping.org_id = principal.org_id
+        mapping.owner_principal_id = principal.id
+    session.commit()
+
+    try:
+        client.start_failing_run(settings.trial_demo_workflow)
+    except GithubUnavailableError:
+        raise HTTPException(status.HTTP_502_BAD_GATEWAY) from None
+    recent[principal.id] = now
+    return BreakStarted(started=True, workflow=settings.trial_demo_workflow)
