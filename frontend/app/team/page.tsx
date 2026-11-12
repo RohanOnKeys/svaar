@@ -7,7 +7,8 @@ import styles from "../_site/site.module.css";
 
 export const metadata: Metadata = { title: "Team · Svaar" };
 
-// `color` matches each sticker's outline.
+// `color` matches each sticker's outline; a white outline uses the hair instead, so the
+// icons show on the light background.
 const team: {
   name: string;
   photo: string;
@@ -19,7 +20,7 @@ const team: {
   {
     name: "Rohan Pattanayak",
     photo: "/team/rohan-v2.png",
-    color: "#f5f4f2",
+    color: "#4a3226",
     email: "rohanpxquantum@gmail.com",
     linkedin: "https://www.linkedin.com/in/rohan-a142a1284/",
   },
@@ -50,7 +51,7 @@ export default function TeamPage() {
   return (
     <div className={styles.shell}>
       {/* A wide clip: as-is on desktop, turned upright on phones. */}
-      <PageVideo wide="/team-bg-v2.mp4" tall={null} />
+      <PageVideo wide="/team/14683997_3840_2160_30fps.mp4" tall={null} />
       <SiteHeader />
       <main className={styles.main}>
         <h1 className={styles.visuallyHidden}>Team</h1>

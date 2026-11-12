@@ -11,8 +11,9 @@ const DEMO_MAILTO = "mailto:robinxander23@gmail.com?subject=Svaar%20demo";
 export default function ConsolePage() {
   return (
     <div className={styles.page}>
-      {/* A wide clip: as-is on desktop, turned upright on phones. */}
-      <PageVideo wide="/console-bg-v3.mp4" tall={null} />
+      {/* A wide clip at quarter speed, its end faded into its start: as-is on desktop,
+          turned upright on phones. */}
+      <PageVideo wide="/creame_waves.mp4" tall={null} speed={0.25} blend={2} />
       <SiteHeader />
       <ProfileButton />
       <main className={styles.main}>

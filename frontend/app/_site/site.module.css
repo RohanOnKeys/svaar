@@ -24,6 +24,14 @@
   display: block;
 }
 
+/* The second copy of a blended loop, stacked over the first and faded from code. */
+.pageVideo .pageVideoBlend {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
 /* A landscape-only clip turned upright to fill a portrait screen. */
 .pageVideo .pageVideoTurned {
   position: absolute;

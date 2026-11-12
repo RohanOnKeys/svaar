@@ -37,6 +37,17 @@
   object-position: center 60%;
 }
 
+/* A burgundy tint over the video and still, under an even ivory veil so the ink text
+   (header included) stays readable on the clip's darker edges. */
+.background::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(255, 251, 239, 0.3), rgba(255, 251, 239, 0.3)),
+    rgba(109, 26, 44, 0.35);
+}
+
 /* The vertical background clip: upright on phones (portrait screens)… */
 .bgVideo {
   position: absolute;
