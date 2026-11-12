@@ -74,18 +74,21 @@ function blendLoop(bottom: HTMLVideoElement, top: HTMLVideoElement, blend: numbe
  * block autoplay still start it on the first tap. Reduced-motion visitors get a
  * still frame. `speed` sets the playback rate (1 is normal; below 1 is slower).
  * `blend` (seconds of clip) fades the end into the start for a seamless loop; 0 is a
- * plain loop.
+ * plain loop. `zoom` scales the clip up from the centre (1 is plain cover), to crop
+ * its edges away.
  */
 export default function PageVideo({
   wide = null,
   tall = null,
   speed = 1,
   blend = 0,
+  zoom = 1,
 }: {
   wide?: string | null;
   tall?: string | null;
   speed?: number;
   blend?: number;
+  zoom?: number;
 }) {
   const video = useRef<HTMLVideoElement>(null);
   const overlay = useRef<HTMLVideoElement>(null);
@@ -124,7 +127,11 @@ export default function PageVideo({
 
   const turned = rotate ? styles.pageVideoTurned : "";
   return (
-    <div className={styles.pageVideo} aria-hidden="true">
+    <div
+      className={styles.pageVideo}
+      style={{ "--zoom": zoom } as React.CSSProperties}
+      aria-hidden="true"
+    >
       {src ? (
         <video
           ref={video}

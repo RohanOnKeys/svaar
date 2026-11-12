@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { LinkedInIcon, MailIcon } from "./icons";
-import PageVideo from "../_site/page-video";
 import SiteHeader from "../_site/site-header";
 import styles from "../_site/site.module.css";
 
@@ -50,8 +49,6 @@ const team: {
 export default function TeamPage() {
   return (
     <div className={styles.shell}>
-      {/* A wide clip: as-is on desktop, turned upright on phones. */}
-      <PageVideo wide="/team/14683997_3840_2160_30fps.mp4" tall={null} />
       <SiteHeader />
       <main className={styles.main}>
         <h1 className={styles.visuallyHidden}>Team</h1>

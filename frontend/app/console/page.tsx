@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import PageVideo from "../_site/page-video";
 import ProfileButton from "../_site/profile-button";
 import SiteHeader from "../_site/site-header";
 import styles from "./console.module.css";
@@ -11,9 +10,6 @@ const DEMO_MAILTO = "mailto:robinxander23@gmail.com?subject=Svaar%20demo";
 export default function ConsolePage() {
   return (
     <div className={styles.page}>
-      {/* A wide clip at half speed, its end faded into its start: as-is on desktop,
-          turned upright on phones. */}
-      <PageVideo wide="/7677254-hd_1920_1080_25fps.mp4" tall={null} speed={0.5} blend={2} />
       <SiteHeader />
       <ProfileButton />
       <main className={styles.main}>

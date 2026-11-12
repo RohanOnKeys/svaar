@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import ImageSlot from "../_site/image-slot";
 import { scenarios } from "../_site/mock";
 import ProfileButton from "../_site/profile-button";
 import SiteHeader from "../_site/site-header";
 import ScenarioCards from "./scenario-cards";
 import SignUp from "./sign-up";
-import TryVideo from "./try-video";
 import styles from "./try.module.css";
 
 export const metadata: Metadata = { title: "Try Svaar" };
@@ -21,12 +19,8 @@ const steps = [
 export default function TryPage() {
   return (
     <div className={styles.page}>
-      {/* Background video at half speed, with a still of the landing background underneath
-          while it loads, both under a burgundy tint. */}
-      <div className={styles.background} aria-hidden="true">
-        <Image src="/try-still-v1.jpg" alt="" fill preload sizes="100vw" />
-        <TryVideo src="/try-bg-v1.mp4" speed={0.5} />
-      </div>
+      {/* A burgundy tint over the shared background video, so the text stays readable. */}
+      <div className={styles.background} aria-hidden="true" />
       <SiteHeader />
       <ProfileButton />
       <main className={styles.main}>

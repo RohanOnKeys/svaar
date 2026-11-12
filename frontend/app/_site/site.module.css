@@ -10,11 +10,13 @@
   text-shadow: 0 0 16px rgba(255, 244, 238, 0.6);
 }
 
-/* Fixed video behind the inner pages: wide on desktop, vertical on phones. */
+/* Fixed video behind every page, mounted once in the root layout. `--zoom` scales it
+   from the centre to crop its edges. */
 .pageVideo {
   position: fixed;
   inset: 0;
   z-index: -1;
+  overflow: hidden;
 }
 
 .pageVideo video {
@@ -22,6 +24,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transform: scale(var(--zoom, 1));
 }
 
 /* The second copy of a blended loop, stacked over the first and faded from code. */
@@ -39,7 +42,7 @@
   left: 50%;
   width: 100vh;
   height: 100vw;
-  transform: translate(-50%, -50%) rotate(90deg);
+  transform: translate(-50%, -50%) rotate(90deg) scale(var(--zoom, 1));
 }
 
 /* Header */
@@ -684,6 +687,11 @@
 }
 
 .profileCard {
+  /* A light card: dark text even on pages that turn their text ivory (Try). */
+  --ink: #121212;
+  --ink-soft: #1c1c1c;
+  --ink-faint: #5b4d47;
+  color: var(--ink);
   display: grid;
   gap: 6px;
   min-width: 220px;
