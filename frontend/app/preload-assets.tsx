@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-const PAGES = ["/", "/try", "/console", "/team"];
+const PAGES = ["/", "/try", "/try/live", "/console", "/team"];
 
 /**
  * Warms the browser cache once per visit so moving between pages loads nothing new.

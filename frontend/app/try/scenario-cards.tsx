@@ -1,6 +1,7 @@
 "use client";
 
 import { onAuthStateChanged, type User } from "firebase/auth";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { firebaseAuth, firebaseConfigured, signInWithGoogle } from "../_site/firebase";
 import styles from "./try.module.css";
@@ -19,12 +20,14 @@ type RunState = "idle" | "starting" | "started";
 
 /**
  * The scenario cards, each with one button that runs it. Only scenarios with a
- * working backend trigger are enabled; the rest say so plainly.
+ * working backend trigger are enabled; the rest say so plainly. Once a run starts,
+ * the visitor is taken to the live trail page to watch it.
  */
 export default function ScenarioCards({ scenarios }: { scenarios: Scenario[] }) {
   const [user, setUser] = useState<User | null>(null);
   const [state, setState] = useState<Record<string, RunState>>({});
   const [message, setMessage] = useState<Record<string, string>>({});
+  const router = useRouter();
 
   useEffect(() => {
     if (!firebaseConfigured) return;
@@ -59,7 +62,7 @@ export default function ScenarioCards({ scenarios }: { scenarios: Scenario[] }) 
         say("Couldn't start it. Please try again.");
       } else {
         setState((all) => ({ ...all, [key]: "started" }));
-        say("Started. Watch the Live section above; the alert appears there.");
+        router.push("/try/live?started=1");
         return;
       }
     } catch {

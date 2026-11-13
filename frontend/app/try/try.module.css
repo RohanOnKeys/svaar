@@ -91,6 +91,12 @@
   text-align: center;
 }
 
+/* The live trail page: one readable column. */
+.liveTrail {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
 .split {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
@@ -183,6 +189,7 @@
 .button,
 .buttonSolid {
   display: inline-block;
+  text-decoration: none;
   padding: 10px 22px;
   border: 1.5px solid var(--ink);
   border-radius: 999px;

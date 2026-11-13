@@ -1,11 +1,11 @@
 "use client";
 
 import { onAuthStateChanged, signOut, type User } from "firebase/auth";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { firebaseAuth, firebaseConfigured, signInWithGoogle } from "../_site/firebase";
 import styles from "./try.module.css";
-import IncidentPanel from "./incident-panel";
 
 type Stage = "loading" | "signed-out" | "details" | "saving" | "ready";
 
@@ -116,7 +116,6 @@ export default function SignUp() {
 
   if (stage === "ready") {
     return (
-      <div className={styles.stack}>
       <div className={`${styles.panel} ${styles.form}`}>
         <p>
           {member?.created ? "Your demo team is ready" : "Welcome back"},{" "}
@@ -132,8 +131,12 @@ export default function SignUp() {
             Sign out
           </button>
         </div>
-      </div>
-      <IncidentPanel user={user} />
+        {/* The live trail has its own page. */}
+        <div className={styles.row}>
+          <Link href="/try/live" className={styles.buttonSolid}>
+            See it live
+          </Link>
+        </div>
       </div>
     );
   }

@@ -23,14 +23,17 @@ const POLL_MS = 4000;
  * Live view of the signed-in person's latest incident, refreshed every few seconds.
  * In the browser-only demo this is where the owner alert appears (instead of a chat
  * app), with a button to acknowledge it right here. Everything shown comes from the
- * backend's recorded facts; nothing is simulated on the page.
+ * backend's recorded facts; nothing is simulated on the page. `started` means a run
+ * was just started from the Try page, so it opens already waiting for GitHub.
  */
-export default function IncidentPanel({ user }: { user: User }) {
+export default function IncidentPanel({ user, started = false }: { user: User; started?: boolean }) {
   const [incident, setIncident] = useState<Incident | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const [breaking, setBreaking] = useState<"idle" | "starting" | "started">("idle");
+  const [breaking, setBreaking] = useState<"idle" | "starting" | "started">(
+    started ? "started" : "idle",
+  );
 
   const call = useCallback(
     async (path: string, method = "GET") => {
