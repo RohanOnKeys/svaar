@@ -1,7 +1,7 @@
 "use client";
 
 import { onAuthStateChanged, type User } from "firebase/auth";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { firebaseAuth, firebaseConfigured, signInWithGoogle } from "../_site/firebase";
 import styles from "./try.module.css";
@@ -21,13 +21,12 @@ type RunState = "idle" | "starting" | "started";
 /**
  * The scenario cards, each with one button that runs it. Only scenarios with a
  * working backend trigger are enabled; the rest say so plainly. Once a run starts,
- * the visitor is taken to the live trail page to watch it.
+ * its button turns into a link to the live trail page.
  */
 export default function ScenarioCards({ scenarios }: { scenarios: Scenario[] }) {
   const [user, setUser] = useState<User | null>(null);
   const [state, setState] = useState<Record<string, RunState>>({});
   const [message, setMessage] = useState<Record<string, string>>({});
-  const router = useRouter();
 
   useEffect(() => {
     if (!firebaseConfigured) return;
@@ -62,7 +61,6 @@ export default function ScenarioCards({ scenarios }: { scenarios: Scenario[] }) 
         say("Couldn't start it. Please try again.");
       } else {
         setState((all) => ({ ...all, [key]: "started" }));
-        router.push("/try/live?started=1");
         return;
       }
     } catch {
@@ -81,20 +79,18 @@ export default function ScenarioCards({ scenarios }: { scenarios: Scenario[] }) 
             <h3>{scenario.title}</h3>
             <p>{scenario.body}</p>
             <div className={styles.cardAction}>
-              {scenario.run ? (
+              {scenario.run && current === "started" ? (
+                <Link href="/try/live?started=1" className={styles.buttonSolid}>
+                  See it live
+                </Link>
+              ) : scenario.run ? (
                 <button
                   type="button"
                   className={styles.buttonSolid}
                   onClick={() => run(scenario)}
                   disabled={current !== "idle"}
                 >
-                  {current === "starting"
-                    ? "Starting…"
-                    : current === "started"
-                      ? "Running…"
-                      : user
-                        ? "Run it"
-                        : "Sign in to run"}
+                  {current === "starting" ? "Starting…" : user ? "Run it" : "Sign in to run"}
                 </button>
               ) : (
                 <button type="button" className={styles.button} disabled>
