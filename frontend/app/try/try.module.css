@@ -370,6 +370,33 @@
   line-height: 1.5;
 }
 
+/* Scenarios under maintenance: the cards themselves are blurred, very lightly, so
+   there is no overlay shape or edge, only the blur. The note sits on top, sharp. */
+.maintenance {
+  position: relative;
+}
+
+.maintenanceBlur {
+  filter: blur(3px);
+  user-select: none;
+}
+
+.maintenanceNote {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  color: var(--ivory);
+  font-size: clamp(36px, 6vw, 84px);
+  line-height: 1;
+  text-align: center;
+  /* Gotu has one weight; a heavy stroke and a soft shadow make it read thick. */
+  -webkit-text-stroke: 2.5px currentColor;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
 /* Image area: soft and rounded; a gentle dashed pink outline until the image exists. */
 .cardImage {
   display: block;

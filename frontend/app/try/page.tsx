@@ -27,8 +27,9 @@ export default function TryPage() {
         <section className={styles.hero}>
           <h1 className={styles.title}>More than a Pager</h1>
           <p className={styles.lede}>
-            Svaar reads the failure, tells you what broke, checks what people claim, and only rings
-            your phone when it has to. Set up a demo team, break a build, and let it call you.
+            Svaar reads the failure, tells you what broke, checks what people
+            claim, and only rings your phone when it has to. Set up a demo team,
+            break a build, and let it call you.
           </p>
         </section>
 
@@ -36,7 +37,10 @@ export default function TryPage() {
           <h2 className={styles.sectionTitle}>Set up a demo team</h2>
           <div className={styles.split}>
             <SignUp />
-            <ol className={`${styles.timeline} ${styles.steps}`} aria-label="What happens next">
+            <ol
+              className={`${styles.timeline} ${styles.steps}`}
+              aria-label="What happens next"
+            >
               {steps.map((step) => (
                 <li key={step}>{step}</li>
               ))}
@@ -46,22 +50,29 @@ export default function TryPage() {
 
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Scenarios to try</h2>
-          <ScenarioCards
-            scenarios={scenarios.map((scenario, index) => ({
-              title: scenario.title,
-              body: scenario.body,
-              // Only "A build breaks" has a live trigger so far.
-              run: index === 0 ? "/break" : undefined,
-              // The first card keeps its image placeholder; the others say TBA.
-              image: (
-                <ImageSlot
-                  name={scenario.image}
-                  className={styles.cardImage}
-                  label={index === 0 ? undefined : "TBA"}
-                />
-              ),
-            }))}
-          />
+          {/* Under maintenance: the cards stay faintly visible behind a soft blur (on
+              the cards themselves, so it has no edge) and can't be used. */}
+          <div className={styles.maintenance}>
+            <div className={styles.maintenanceBlur} inert>
+              <ScenarioCards
+                scenarios={scenarios.map((scenario, index) => ({
+                  title: scenario.title,
+                  body: scenario.body,
+                  // Only "A build breaks" has a live trigger so far.
+                  run: index === 0 ? "/break" : undefined,
+                  // The first card keeps its image placeholder; the others say TBA.
+                  image: (
+                    <ImageSlot
+                      name={scenario.image}
+                      className={styles.cardImage}
+                      label={index === 0 ? undefined : "TBA"}
+                    />
+                  ),
+                }))}
+              />
+            </div>
+            <p className={styles.maintenanceNote}>Under maintenance</p>
+          </div>
         </section>
       </main>
     </div>
