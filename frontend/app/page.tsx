@@ -1,20 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { IconType } from "react-icons";
-import { FaDiscord, FaEnvelope, FaPhoneAlt, FaSlack, FaTelegramPlane } from "react-icons/fa";
+import { channels } from "./_site/channels";
 import styles from "./page.module.css";
 import BackgroundVideo from "./background-video";
 import CardTrail from "./card-trail";
 import MatchGap from "./match-gap";
-
-// Channels Svaar supports; shown as information, not links.
-const channels: { label: string; icon: IconType }[] = [
-  { label: "Email", icon: FaEnvelope },
-  { label: "Phone", icon: FaPhoneAlt },
-  { label: "Discord", icon: FaDiscord },
-  { label: "Slack", icon: FaSlack },
-  { label: "Telegram", icon: FaTelegramPlane },
-];
 
 const PREVIEW_MAILTO = "mailto:robinxander23@gmail.com?subject=Svaar%20preview";
 
