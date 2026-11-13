@@ -11,17 +11,21 @@ const links = [
   { href: "/team", label: "Team" },
 ];
 
-export default function SiteHeader() {
+// The swan in the header: the dark one by default, an ivory one for dark backgrounds.
+const MARKS = {
+  dark: { src: "/swan.png", width: 894, height: 868 },
+  ivory: { src: "/swan-ivory.png", width: 1080, height: 1049 },
+};
+
+export default function SiteHeader({ mark = "dark" }: { mark?: keyof typeof MARKS }) {
   const pathname = usePathname();
 
   return (
     <header className={styles.header}>
       <Link href="/" className={styles.brand}>
         <Image
-          src="/swan.png"
+          {...MARKS[mark]}
           alt=""
-          width={894}
-          height={868}
           className={styles.brandMark}
           loading="eager"
         />

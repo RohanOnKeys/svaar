@@ -10,7 +10,7 @@ const DEMO_MAILTO = "mailto:robinxander23@gmail.com?subject=Svaar%20demo";
 export default function ConsolePage() {
   return (
     <div className={styles.page}>
-      <SiteHeader />
+      <SiteHeader mark="ivory" />
       <ProfileButton />
       <main className={styles.main}>
         <h1 className={styles.title}>Request for access</h1>

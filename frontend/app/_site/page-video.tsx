@@ -75,7 +75,8 @@ function blendLoop(bottom: HTMLVideoElement, top: HTMLVideoElement, blend: numbe
  * still frame. `speed` sets the playback rate (1 is normal; below 1 is slower).
  * `blend` (seconds of clip) fades the end into the start for a seamless loop; 0 is a
  * plain loop. `zoom` scales the clip up from the centre (1 is plain cover), to crop
- * its edges away.
+ * its edges away. `filter` is a CSS filter for the whole clip; changing it applies
+ * at once and never reloads the clip.
  */
 export default function PageVideo({
   wide = null,
@@ -83,12 +84,14 @@ export default function PageVideo({
   speed = 1,
   blend = 0,
   zoom = 1,
+  filter,
 }: {
   wide?: string | null;
   tall?: string | null;
   speed?: number;
   blend?: number;
   zoom?: number;
+  filter?: string;
 }) {
   const video = useRef<HTMLVideoElement>(null);
   const overlay = useRef<HTMLVideoElement>(null);
@@ -129,7 +132,7 @@ export default function PageVideo({
   return (
     <div
       className={styles.pageVideo}
-      style={{ "--zoom": zoom } as React.CSSProperties}
+      style={{ "--zoom": zoom, filter } as React.CSSProperties}
       aria-hidden="true"
     >
       {src ? (

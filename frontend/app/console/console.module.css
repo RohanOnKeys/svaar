@@ -1,25 +1,19 @@
-/* Console: one screen, a small burgundy "Request for access" and a Book a demo pill. */
+/* Console: one screen, a small "Request for access" and a Book a demo pill. All text
+   is the button's ivory, header included, on the black background. */
 
 .page {
   --ivory: #fffbef;
   --burgundy: #6d1a2c;
+  --ink: var(--ivory);
+  --ink-soft: var(--ivory);
+  --ink-faint: var(--ivory);
+  color: var(--ivory);
   position: relative;
   isolation: isolate;
   min-height: 100vh;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-}
-
-/* An ivory filter over the shared background video. */
-.page::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background: var(--ivory);
-  opacity: 0.55;
-  pointer-events: none;
 }
 
 .main {
@@ -35,7 +29,7 @@
 /* Small line above the big button. */
 .title {
   margin: 0;
-  color: var(--burgundy);
+  color: var(--ivory);
   font-size: clamp(13px, 1.1vw, 16px);
   font-weight: 400;
   letter-spacing: 0.14em;

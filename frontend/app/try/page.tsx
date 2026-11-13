@@ -21,7 +21,7 @@ export default function TryPage() {
     <div className={styles.page}>
       {/* A burgundy tint over the shared background video, so the text stays readable. */}
       <div className={styles.background} aria-hidden="true" />
-      <SiteHeader />
+      <SiteHeader mark="ivory" />
       <ProfileButton />
       <main className={styles.main}>
         <section className={styles.hero}>
